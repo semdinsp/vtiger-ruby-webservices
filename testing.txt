@@ -1,0 +1,7 @@
+tsting via curl
+
+
+ curl -d username=scott -d accessKey=819335726ee4e2aea6a27898cb151e15 http://crm.estormtech.com/webservice.php?operation=login
+{"success":true,"result":{"sessionName":"3a8b6b834a63eb909ecfa","userId":"19x5","version":"0.2","vtigerVersion":"5.1.0 RC"}}
+
+

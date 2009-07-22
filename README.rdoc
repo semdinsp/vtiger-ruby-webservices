@@ -1,0 +1,309 @@
+= vtiger
+
+Getting access key:
+find userid from vtiger_users  (supposed to be in preferences section)
+select username,accessKey from vtiger_users;
+
+
+tokens are stored in
+ vtiger_ws_userauthtoken  
+
+Usage:
+Server Types: list types on the server
+jruby -S list_types.rb -u crm.estormtech.com  -n scott -k gvKxiF0bx94xt9U
+
+Describe Object:
+
+
+
+
+Testing via curl
+
+
+ curl -d username=scott -d accessKey=819335726ee4e2aea6a27898cb151e15 http://crm.estormtech.com/webservice.php?operation=login
+{"success":true,"result":{"sessionName":"3a8b6b834a63eb909ecfa","userId":"19x5","version":"0.2","vtigerVersion":"5.1.0 RC"}}
+
+
+
+Adding contact:
+
+jruby -S add_contact.rb -u testsmartroam.estormtech.com -e Contacts  -n admin -k ZZTjoVZ2SRl3rhFj  -c test1234 
+url is testsmartroam.estormtech.com
+elementtype Contacts
+username admin
+key ZZTjoVZ2SRl3rhFj
+contact test1234
+vtiger add contact Wed Jul 22 13:04:57 +0800 2009
+vtiger url: testsmartroam.estormtech.com 
+vtiger contact: test1234 
+in challenge
+challenge: http://testsmartroam.estormtech.com/webservice.php?operation=getchallenge&username=admin
+about to HTTP.get on 'http://testsmartroam.estormtech.com/webservice.php?operation=getchallenge&username=admin'
+{
+  "success": true,
+  "result": {
+    "token": "4a669dfb57c5c",
+    "serverTime": 1248239099,
+    "expireTime": 1248239399
+  }
+}
+success is: 
+token is: 4a669dfb57c5c
+string 4a669dfb57c5cZZTjoVZ2SRl3rhFj results in digest: 5c0a9193d7633c95d702ab2fe26ab949 access key: ZZTjoVZ2SRl3rhFj token: 4a669dfb57c5c
+digest is: 5c0a9193d7633c95d702ab2fe26ab949
+in login
+input array:operationloginusernameadminaccessKey5c0a9193d7633c95d702ab2fe26ab949
+ endpoint: http://testsmartroam.estormtech.com/webservice.php?
+host is: testsmartroam.estormtech.com
+attemping post: http://testsmartroam.estormtech.com/webservice.php?operation=login body: operationloginusernameadminaccessKey5c0a9193d7633c95d702ab2fe26ab949 body_enc= operation=login&username=admin&accessKey=5c0a9193d7633c95d702ab2fe26ab949
+"{\"success\":true,\"result\":{\"sessionName\":\"727588c04a669dfc86289\",\"userId\":\"19x1\",\"version\":\"0.2\",\"vtigerVersion\":\"5.1.0 RC\"}}"
+session name is: 727588c04a669dfc86289 userid 19x1
+in addobject
+input array:operationcreateelementTypeContactssessionName727588c04a669dfc86289element{"assigned_user_id":"19x1","lastname":"test1234"}
+ endpoint: http://testsmartroam.estormtech.com/webservice.php?
+host is: testsmartroam.estormtech.com
+attemping post: http://testsmartroam.estormtech.com/webservice.php?operation=create body: operationcreateelementTypeContactssessionName727588c04a669dfc86289element{"assigned_user_id":"19x1","lastname":"test1234"} body_enc= operation=create&elementType=Contacts&sessionName=727588c04a669dfc86289&element=%7B%22assigned_user_id%22%3A%2219x1%22%2C%22lastname%22%3A%22test1234%22%7D
+"{\"success\":true,\"result\":{\"account_id\":\"\",\"assistant\":\"\",\"assistantphone\":\"\",\"birthday\":\"\",\"contact_no\":\"CON14\",\"createdtime\":\"2009-07-22 05:05:02\",\"department\":\"\",\"description\":\"\",\"donotcall\":\"0\",\"email\":\"\",\"emailoptout\":\"0\",\"fax\":\"\",\"firstname\":\"\",\"homephone\":\"\",\"lastname\":\"test1234\",\"leadsource\":\"\",\"mailingcity\":\"\",\"mailingcountry\":\"\",\"mailingpobox\":\"\",\"mailingstate\":\"\",\"mailingstreet\":\"\",\"mailingzip\":\"\",\"mobile\":\"\",\"modifiedtime\":\"2009-07-22 05:05:02\",\"notify_owner\":\"0\",\"othercity\":\"\",\"othercountry\":\"\",\"otherphone\":\"\",\"otherpobox\":\"\",\"otherstate\":\"\",\"otherstreet\":\"\",\"otherzip\":\"\",\"phone\":\"\",\"portal\":\"0\",\"reference\":\"0\",\"contact_id\":\"\",\"salutationtype\":\"\",\"assigned_user_id\":\"19x1\",\"support_end_date\":\"\",\"support_start_date\":\"\",\"title\":\"\",\"yahooid\":\"\",\"id\":\"4x129\"}}"
+{
+  "success": true,
+  "result": {
+    "account_id": "",
+    "assistant": "",
+    "assistantphone": "",
+    "birthday": "",
+    "contact_no": "CON14",
+    "createdtime": "2009-07-22 05:05:02",
+    "department": "",
+    "description": "",
+    "donotcall": "0",
+    "email": "",
+    "emailoptout": "0",
+    "fax": "",
+    "firstname": "",
+    "homephone": "",
+    "lastname": "test1234",
+    "leadsource": "",
+    "mailingcity": "",
+    "mailingcountry": "",
+    "mailingpobox": "",
+    "mailingstate": "",
+    "mailingstreet": "",
+    "mailingzip": "",
+    "mobile": "",
+    "modifiedtime": "2009-07-22 05:05:02",
+    "notify_owner": "0",
+    "othercity": "",
+    "othercountry": "",
+    "otherphone": "",
+    "otherpobox": "",
+    "otherstate": "",
+    "otherstreet": "",
+    "otherzip": "",
+    "phone": "",
+    "portal": "0",
+    "reference": "0",
+    "contact_id": "",
+    "salutationtype": "",
+    "assigned_user_id": "19x1",
+    "support_end_date": "",
+    "support_start_date": "",
+    "title": "",
+    "yahooid": "",
+    "id": "4x129"
+  }
+}
+-------------finished processing!!!
+
+
+Listing objects
+
+jruby -S list_types.rb -u testsmartroam.estormtech.com  -n admin -k  ZZTjoVZ2SRl3rhFjurl is testsmartroam.estormtech.com
+username admin
+key ZZTjoVZ2SRl3rhFj
+vtiger add contact Wed Jul 22 12:57:18 +0800 2009
+vtiger url: testsmartroam.estormtech.com 
+vtiger contact:  
+in challenge
+challenge: http://testsmartroam.estormtech.com/webservice.php?operation=getchallenge&username=admin
+about to HTTP.get on 'http://testsmartroam.estormtech.com/webservice.php?operation=getchallenge&username=admin'
+{
+  "success": true,
+  "result": {
+    "token": "4a669c308fb3c",
+    "serverTime": 1248238640,
+    "expireTime": 1248238940
+  }
+}
+success is: 
+token is: 4a669c308fb3c
+string 4a669c308fb3cZZTjoVZ2SRl3rhFj results in digest: 961f451f0a1a665d1d6c01700bdc3ef9 access key: ZZTjoVZ2SRl3rhFj token: 4a669c308fb3c
+digest is: 961f451f0a1a665d1d6c01700bdc3ef9
+in login
+input array:operationloginusernameadminaccessKey961f451f0a1a665d1d6c01700bdc3ef9
+ endpoint: http://testsmartroam.estormtech.com/webservice.php?
+host is: testsmartroam.estormtech.com
+attemping post: http://testsmartroam.estormtech.com/webservice.php?operation=login body: operationloginusernameadminaccessKey961f451f0a1a665d1d6c01700bdc3ef9 body_enc= operation=login&username=admin&accessKey=961f451f0a1a665d1d6c01700bdc3ef9
+"{\"success\":true,\"result\":{\"sessionName\":\"2194d6154a669c31bc4d9\",\"userId\":\"19x1\",\"version\":\"0.2\",\"vtigerVersion\":\"5.1.0 RC\"}}"
+session name is: 2194d6154a669c31bc4d9 userid 19x1
+in list types
+about to HTTP.get on 'http://testsmartroam.estormtech.com/webservice.php?operation=listtypes&sessionName=2194d6154a669c31bc4d9'
+{
+  "success": true,
+  "result": {
+    "types": [
+      "Calendar",
+      "Leads",
+      "Accounts",
+      "Contacts",
+      "Potentials",
+      "Products",
+      "Documents",
+      "Emails",
+      "HelpDesk",
+      "Faq",
+      "Vendors",
+      "PriceBooks",
+      "Quotes",
+      "PurchaseOrder",
+      "SalesOrder",
+      "Invoice",
+      "Campaigns",
+      "Events",
+      "Users",
+      "ServiceContracts",
+      "PBXManager",
+      "Services",
+      "Groups",
+      "Currency",
+      "DocumentFolders"
+    ],
+    "information": {
+      "Calendar": {
+        "isEntity": true,
+        "label": "Calendar",
+        "singular": "To Do"
+      },
+      "Leads": {
+        "isEntity": true,
+        "label": "Leads",
+        "singular": "Lead"
+      },
+      "Accounts": {
+        "isEntity": true,
+        "label": "Accounts",
+        "singular": "Account"
+      },
+      "Contacts": {
+        "isEntity": true,
+        "label": "Contacts",
+        "singular": "Contact"
+      },
+      "Potentials": {
+        "isEntity": true,
+        "label": "Potentials",
+        "singular": "Potential"
+      },
+      "Products": {
+        "isEntity": true,
+        "label": "Products",
+        "singular": "Product"
+      },
+      "Documents": {
+        "isEntity": true,
+        "label": "Documents",
+        "singular": "Document"
+      },
+      "Emails": {
+        "isEntity": true,
+        "label": "Email",
+        "singular": "Email"
+      },
+      "HelpDesk": {
+        "isEntity": true,
+        "label": "Trouble Tickets",
+        "singular": "Ticket"
+      },
+      "Faq": {
+        "isEntity": true,
+        "label": "FAQ",
+        "singular": "Faq"
+      },
+      "Vendors": {
+        "isEntity": true,
+        "label": "Vendors",
+        "singular": "Vendor"
+      },
+      "PriceBooks": {
+        "isEntity": true,
+        "label": "Price Books",
+        "singular": "PriceBook"
+      },
+      "Quotes": {
+        "isEntity": true,
+        "label": "Quotes",
+        "singular": "Quote"
+      },
+      "PurchaseOrder": {
+        "isEntity": true,
+        "label": "Purchase Order",
+        "singular": "PurchaseOrder"
+      },
+      "SalesOrder": {
+        "isEntity": true,
+        "label": "Sales Order",
+        "singular": "SalesOrder"
+      },
+      "Invoice": {
+        "isEntity": true,
+        "label": "Invoice",
+        "singular": "Invoice"
+      },
+      "Campaigns": {
+        "isEntity": true,
+        "label": "Campaigns",
+        "singular": "Campaign"
+      },
+      "Events": {
+        "isEntity": true,
+        "label": "Events",
+        "singular": "Event"
+      },
+      "Users": {
+        "isEntity": true,
+        "label": "Users",
+        "singular": "User"
+      },
+      "ServiceContracts": {
+        "isEntity": true,
+        "label": "Service Contracts",
+        "singular": "Service Contract"
+      },
+      "PBXManager": {
+        "isEntity": true,
+        "label": "PBX Manager",
+        "singular": "SINGLE_PBXManager"
+      },
+      "Services": {
+        "isEntity": true,
+        "label": "Services",
+        "singular": "Service"
+      },
+      "Groups": {
+        "isEntity": false,
+        "label": "Groups",
+        "singular": "Groups"
+      },
+      "Currency": {
+        "isEntity": false,
+        "label": "Currency",
+        "singular": "Currency"
+      },
+      "DocumentFolders": {
+        "isEntity": false,
+        "label": "DocumentFolders",
+        "singular": "DocumentFolders"
+      }
+    }
+  }
+}
+-------------finished processing!!!
