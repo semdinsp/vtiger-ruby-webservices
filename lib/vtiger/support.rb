@@ -32,7 +32,10 @@ module Vtiger
     
       opts.on("-c","--contact VAL", String) {|val|  temp_hash[:contact ] = val 
                                               puts "contact #{val}"     }  
-                                              
+      opts.on("-p","--productname VAL", String) {|val|  temp_hash[:productname ] = val 
+                                             puts "productname #{val}"     }             
+      opts.on("-Q","--quantity VAL", String) {|val|  temp_hash[:quantity ] = val 
+                   puts "stock to change #{val}"     }                                            
            opts.on("-i","--objectid VAL", String) {|val|  temp_hash[:objectid ] = val 
                                                                                         puts "objectid #{val}"     }
                  opts.on("-q","--query VAL", String) {|val|  temp_hash[:query ] = val 

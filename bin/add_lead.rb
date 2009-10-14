@@ -5,7 +5,7 @@
 #  add_contact.rb -u vtiger_url  -e Contacts  -n username -k access_key -c contactName
 # Note -a flag for response  --- eg true or false
 # == Useful commands
-#  jruby add_contact.rb -u democrm.estormtech.com -c test  -n scott -k xxxxx 
+#  jruby add_lead.rb -u democrm.estormtech.com -c test  -n scott -k xxxxx 
 # == Author
 #   Scott Sproule  --- Ficonab.com (scott.sproule@ficonab.com)
 # == Copyright
@@ -33,7 +33,7 @@ require 'pp'
     cmd = Vtiger::Commands.new()
     cmd.challenge(options)
     cmd.login(options)
-    cmd.addobject(options)
+    cmd.addlead(options)
   #   consumer_session.close
    #  puts "#{result}"
  #  sleep(1)

@@ -5,7 +5,7 @@
 #  jruby -S query.rb -u website  -n username -k accesskey -q sql_query string
 # 
 # == Useful commands
-#  jruby -S query.rb -u crm.estormtech.com  -n scott -k gvKxiF0bx94xt9U -q 'select * from vtiger_account'
+#  jruby -S query.rb -u democrm.estormtech.com  -n scott -k xxxxx -q 'select * from Accounts;'
 # == Author
 #   Scott Sproule  --- Ficonab.com (scott.sproule@ficonab.com)
 # == Copyright

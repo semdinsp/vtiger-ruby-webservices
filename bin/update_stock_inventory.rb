@@ -1,11 +1,11 @@
 #!/usr/bin/env jruby -S
 # == Synopsis
-#   Add a contact to vtiger 
+#   Update stock for give product
 # == Usage
-#  add_contact.rb -u vtiger_url  -e Contacts  -n username -k access_key -c contactName
-# Note -a flag for response  --- eg true or false
+#  update_stock_inventory.rb -u vtiger_url  -e Products  -n username -k access_key -p productName -q -1
 # == Useful commands
-#  jruby add_contact.rb -u democrm.estormtech.com -c test  -n scott -k xxxxx 
+# note uppercase Q and lowercase -p for product.
+#  jruby update_stock_inventory.rb -u democrm.estormtech.com -c test  -n scott -k xxxxx  -p "test for rap" -Q -1
 # == Author
 #   Scott Sproule  --- Ficonab.com (scott.sproule@ficonab.com)
 # == Copyright
@@ -33,7 +33,7 @@ require 'pp'
     cmd = Vtiger::Commands.new()
     cmd.challenge(options)
     cmd.login(options)
-    cmd.addobject(options)
+    cmd.query_product_inventory(options)
   #   consumer_session.close
    #  puts "#{result}"
  #  sleep(1)

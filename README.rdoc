@@ -10,10 +10,13 @@ tokens are stored in
 
 Usage:
 Server Types: list types on the server
-jruby -S list_types.rb -u crm.estormtech.com  -n scott -k gvKxiF0bx94xt9U
+jruby -S list_types.rb -u democrm.estormtech.com  -n scott -k xxxxx
 
 Describe Object:
+jruby -S describe_object.rb -u crm.estormtech.com  -n admin  -k lwyIHQA6VxTSmBg  -e Contacts
 
+Getting the custom field ids
+jruby -S describe_object.rb -u crm.estormtech.com  -n admin  -k lwyIHQA6VxTSmBg  -e Contacts | grep for the label name
 
 
 

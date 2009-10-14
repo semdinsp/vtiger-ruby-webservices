@@ -4,8 +4,10 @@
 # == Usage
 #  describe object.rb -u vtiger_url  -e object  -n username -k access_key
 # Note -a flag for response  --- eg true or false
+# 
 # == Useful commands
-#  jruby -S describe_object.rb -e Contacts -u crm.estormtech.com  -n scott -k gvKxiF0bx94xt9U
+#  jruby -S describe_object.rb -e Contacts -u democrm.estormtech.com  -n scott -k gvKxiF0bx94xt9U
+#   (this is a long response, try grep -A 5 to look five lines after what you are interested)
 
 # == Author
 #   Scott Sproule  --- Ficonab.com (scott.sproule@ficonab.com)
