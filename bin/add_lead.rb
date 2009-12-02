@@ -17,7 +17,7 @@ gem 'vtiger'
 require 'vtiger'
 require 'optparse'
 require 'rdoc/usage'
-require 'java'
+require 'java' if RUBY_PLATFORM =~ /java/
 
 
 
@@ -42,7 +42,3 @@ require 'pp'
     
     puts  '-------------finished processing!!!'
  
-    
-   # Thread.exit
-    exit!
-  

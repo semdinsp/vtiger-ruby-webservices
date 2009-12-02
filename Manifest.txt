@@ -7,6 +7,7 @@ lib/vtiger.rb
 lib/vtiger/support.rb
 lib/vtiger/commands.rb
 bin/add_contact.rb
+bin/yahoo_csv.rb
 bin/update_stock_inventory.rb
 bin/add_lead.rb
 bin/describe_object.rb

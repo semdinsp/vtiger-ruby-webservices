@@ -1,6 +1,24 @@
 = vtiger
+* http://estormtech.com
 
-Getting access key:
+== DESCRIPTION:
+
+some common scripts for setting up files for estormtech.  Private.
+
+== FEATURES/PROBLEMS:
+
+* TBD
+
+== SYNOPSIS:
+
+  FIX (code sample of usage)
+
+== REQUIREMENTS:
+
+* rubygems
+
+== INSTALL:
+
 find userid from vtiger_users  (supposed to be in preferences section)
 select username,accessKey from vtiger_users;
 
