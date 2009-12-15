@@ -37,11 +37,14 @@ require 'pp'
     cmd.challenge(options)
     cmd.login(options)
     tsipid='77'
-    account_id = cmd.query_tsipid(tsipid,fieldmapping,options)
-    puts "updating account id: #{account_id} tsipid '77' "
-    values=cmd.retrieve_object(account_id)
-    puts values.length
-    cmd.update_yahoo(fieldmapping,values,"www.google.com","traffic_source", "campaign123")
+   # account_id = cmd.query_tsipid(tsipid,fieldmapping,options)
+   # puts "updating account id: #{account_id} tsipid '77' "
+   # values=cmd.retrieve_object(account_id)
+   # puts values.length
+  #  cmd.update_yahoo(fieldmapping,values,"www.google.com","traffic_source", "campaign123")
+    values=Vtiger::Misc.read_csv_file("test.csv")
+    puts values.inspect
+    puts values.size
     
   #   consumer_session.close
    #  puts "#{result}"

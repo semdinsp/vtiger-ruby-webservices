@@ -6,9 +6,15 @@ require 'rexml/document'
 #require 'stomp_message'
 require 'optparse'
 require 'rdoc/usage'
-
+gem 'fastercsv'
+require 'fastercsv'
 
 module Vtiger
+  class Misc
+    def self.read_csv_file(filepath)
+      FasterCSV.read( filepath, { :headers           => true})  
+    end
+  end
   class Options
     def self.parse_options(params)
        opts = OptionParser.new
