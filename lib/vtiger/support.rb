@@ -52,7 +52,8 @@ module Vtiger
                                 puts "key #{val}"     }
      opts.on("-n","--username VAL", String) {|val|  temp_hash[:username ] = val 
                                    puts "username #{val}"     }
-                                                                                                                                                      
+      opts.on("-f","--filename VAL", String) {|val|  temp_hash[:filename ] = val 
+                                                     puts "filename #{val}"     }                                                                                                                                                    
        opts.on("-d","--debug", "turn on debug") { |val| temp_hash[:debug ] = true              }                          
                                              
                                        

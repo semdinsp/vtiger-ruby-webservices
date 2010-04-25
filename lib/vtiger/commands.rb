@@ -24,13 +24,13 @@ module Vtiger
     def http_crm_post(operation, body)
       response = nil
       response_header = {"Content-type" => "application/x-www-form-urlencoded"}
-      puts " endpoint: #{self.endpoint_url}"
+      #puts " endpoint: #{self.endpoint_url}"
        t=URI.split(self.endpoint_url.to_s)
-       puts "host is: " + t[2]   #FIX THIS.
+      # puts "host is: " + t[2]   #FIX THIS.
        ht =Net::HTTP.start(t[2],80)
      
        body_enc=body.url_encode
-       puts "attemping post: #{self.endpoint_url}#{operation} body: #{body} body_enc= #{body_enc}"
+      # puts "attemping post: #{self.endpoint_url}#{operation} body: #{body} body_enc= #{body_enc}"
        response=ht.post(self.endpoint_url+operation,body_enc,response_header)
         
         p response.body.to_s
@@ -65,7 +65,7 @@ module Vtiger
       operation = "operation=getchallenge&username=#{self.username}"; 
        puts "challenge: " + self.endpoint_url + operation
        r=http_ask_get(self.endpoint_url+operation)
-       puts JSON.pretty_generate(r)
+      # puts JSON.pretty_generate(r)
        puts "success is: " + r["success"].to_s   #==true
        self.token = r["result"]["token"] #if r["success"]==true
      
@@ -93,20 +93,26 @@ module Vtiger
       # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
       result = http_crm_post("operation=create",input_array)
      # self.session_name=result["result"]["sessionName"]
-       puts JSON.pretty_generate(result)
+     #  puts JSON.pretty_generate(result)
     end
      # scott was: def updateobject(options,values)
       def updateobject(values)
-        puts "in updateobject"
+        #puts "in updateobject"
         object_map= { 'assigned_user_id'=>"#{self.userid}",'id'=>"#{self.object_id}" }.merge values.to_hash
         # 'tsipid'=>"1234"
-        tmp=JSON.generate(object_map)
+        if RAILS_ENV==nil
+          puts "rails env is nil"
+          tmp=JSON.fast_generate(object_map)   #scott  tmp=JSON.generate(object_map)
+        else
+          puts "in JSON code rails env: #{RAILS_ENV}"
+          tmp=object_map.to_json
+        end
         input_array ={'operation'=>'update','sessionName'=>"#{self.session_name}", 'element'=>tmp} # removed the true
-        puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
+        #puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
         # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
         result = http_crm_post("operation=update",input_array)
        # self.session_name=result["result"]["sessionName"]
-         puts JSON.pretty_generate(result)
+       #  puts JSON.pretty_generate(result)
       end
     def addlead(options)
       puts "in addobject"
@@ -118,7 +124,7 @@ module Vtiger
       # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
       result = http_crm_post("operation=create",input_array)
      # self.session_name=result["result"]["sessionName"]
-       puts JSON.pretty_generate(result)
+      # puts JSON.pretty_generate(result)
     end
     def action(options)
       puts "in action"
@@ -128,21 +134,21 @@ module Vtiger
          #&username=#{self.username}&accessKey=#{self.md5}
           # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
           result = http_ask_get(self.endpoint_url+"operation=listtypes&sessionName=#{self.session_name}")
-          puts JSON.pretty_generate(result)
+         # puts JSON.pretty_generate(result)
       end
       def describe_object(options)
         puts "in describe object"
          #&username=#{self.username}&accessKey=#{self.md5}
           # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
           result = http_ask_get(self.endpoint_url+"operation=describe&sessionName=#{self.session_name}&elementType=#{options[:element_type]}")
-          puts JSON.pretty_generate(result)
+         # puts JSON.pretty_generate(result)
       end
          def retrieve_object(objid)
             puts "in retrieve object"
              #&username=#{self.username}&accessKey=#{self.md5}
               # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
               result = http_ask_get(self.endpoint_url+"operation=retrieve&sessionName=#{self.session_name}&id=#{objid}")
-              puts JSON.pretty_generate(result)
+           #   puts JSON.pretty_generate(result)
                values=result["result"]
                values
           end
@@ -153,11 +159,11 @@ module Vtiger
           action_string=ERB::Util.url_encode("#{options[:query]}")
           result = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
           # http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&userId=#{self.userid}&query="+action_string)
-          puts JSON.pretty_generate(result)
+       #   puts JSON.pretty_generate(result)
       end
       def update_yahoo(fieldmapping,values,referring_domain,traffic_source, campaign)
         #self.object id found in query_tsipid
-        puts "fm: #{fieldmapping[:traffic_source]} ts: #{traffic_source} values: #{values} "
+       # puts "fm: #{fieldmapping[:traffic_source]} ts: #{traffic_source} values: #{values} "
         values[fieldmapping[:traffic_source].to_s]=traffic_source
         values[fieldmapping[:campaign].to_s]=campaign
         values[fieldmapping[:referring_domain].to_s]=referring_domain
@@ -167,16 +173,20 @@ module Vtiger
           puts "in query id"
            #&username=#{self.username}&accessKey=#{self.md5}
             # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
-            action_string=ERB::Util.url_encode("select id,accountname from #{options[:element_type]} where #{fieldmapping[:tsipid]} = '#{id}';")
+            action_string=ERB::Util.url_encode("select id,lastname from #{options[:element_type]} where #{fieldmapping[:tsipid]} = '#{id}';")
+          #  action_string=ERB::Util.url_encode("select id,accountname from #{options[:element_type]} where #{fieldmapping[:tsipid]} = '#{id}';")  ACCOUNTS
             puts "action string:" +action_string
             res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
             # http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&userId=#{self.userid}&query="+action_string)
-            puts JSON.pretty_generate(res)
+         #   puts JSON.pretty_generate(res)
             values=res["result"][0]   #comes back as array
-            puts values.inspect
+            #puts values.inspect
             # return the account id
-             self.object_id=values["id"]
-             self.account_name=values["accountname"]
+             self.object_id = 'failed'
+             if values!= nil 
+                self.object_id=values["id"]
+               self.account_name=values["accountname"] 
+             end
              self.object_id
           #  self.new_quantity = self.qty_in_stock.to_i + options[:quantity].to_i
            #  updateobject(options,{'qtyinstock'=> "#{self.new_quantity}","productname"=>"#{options[:productname]}"})
