@@ -27,6 +27,9 @@ require 'pp'
    fieldmapping[:referring_domain]='cf_622'  #referring domain
    fieldmapping[:traffic_source]='cf_623'  #traffic source
    fieldmapping[:campaign]='cf_624'  #campaign
+   fieldmapping[:revenue]='cf_627'  #revenue
+   fieldmapping[:unique_actions]='cf_628'  #campaign
+   fieldmapping[:search_phrase]='cf_629'  #campaign
    puts "vtiger update contact #{Time.now}"
    puts "vtiger url: #{arg_hash[:url]} "
     puts "vtiger contact: #{arg_hash[:contact]} "
@@ -38,34 +41,29 @@ require 'pp'
    # puts "updating account id: #{account_id} tsipid '77' "
    # values=cmd.retrieve_object(account_id)
    # puts values.length
-   member_label="Member"
-   refering_domain_label="Referring Domain (Direct)"
-   traffic_src_label="Traffic Sources (Intelligent)"
-   campaign_label="Campaign"
-   result_summary=""
+  
+   success_summary=""
+    fail_summary=""
    counter=0
    total= 0
+     member_label="Member"
   #  cmd.update_yahoo(fieldmapping,values,"www.google.com","traffic_source", "campaign123")
     traffic_rows=Vtiger::Misc.read_csv_file(options[:filename]) 
     traffic_rows.collect { |row|
         #puts row
+         break if row[member_label]=="Subtotal"
+        success,summary =cmd.process_row(row,fieldmapping,options)
         total+=1
-        break if row[member_label]=="Subtotal"
-        account_id = cmd.query_tsipid(row[member_label].to_s,fieldmapping,options)
-        #puts "database id: #{account_id}"
-        if account_id!='failed'  
-        values=cmd.retrieve_object(account_id)
-        cmd.update_yahoo(fieldmapping,values,row[refering_domain_label],
-                    row[traffic_src_label], row[campaign_label])
-        result_summary << "#{total} Success: row of yahoo csv with TSIPID: #{row[member_label].to_s}\n" 
-        counter+=1
-        else  
-          result_summary << "#{total} Failure: row of yahoo csv with Member: #{row[member_label].to_s}\n"      
-           # else
-      end    #if
+        success_summary << "#{total} #{summary}" if success
+        counter+=1 if success
+        fail_summary << "#{total} #{summary}" if !success
+       
       }
-      puts  result_summary
+    
       puts  "% complete success #{counter} of total #{total}"
+      puts "Success: #{success_summary}"
+      puts "Fail: #{fail_summary}"
+      
       
    
     
