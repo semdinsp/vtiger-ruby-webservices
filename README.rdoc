@@ -1,5 +1,6 @@
 = vtiger
 * http://estormtech.com
+This gem provides access to vtiger from ruby.  It uses the vtiger web services to access the data in  vtiger system.  
 
 == DESCRIPTION:
 

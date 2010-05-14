@@ -4,6 +4,7 @@ PostInstall.txt
 README.rdoc
 Rakefile
 lib/vtiger.rb
+lib/vtiger/base.rb
 lib/vtiger/support.rb
 lib/vtiger/commands.rb
 bin/add_contact.rb

@@ -1,3 +1,6 @@
 require 'stringio'
 require 'test/unit'
+require 'yaml'
+require 'rubygems'
+gem 'json_pure'
 require File.dirname(__FILE__) + '/../lib/vtiger'
