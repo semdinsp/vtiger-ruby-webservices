@@ -19,7 +19,7 @@ require 'optparse'
 require 'rdoc/usage'
 require 'java' if RUBY_PLATFORM =~ /java/
 
-
+#testing of chagnes
 
  arg_hash=Vtiger::Options.parse_options(ARGV)
  RDoc::usage if arg_hash[:help]==true
