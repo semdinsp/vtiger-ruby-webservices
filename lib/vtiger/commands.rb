@@ -2,9 +2,15 @@ require 'net/http'
 require 'json'
 #require 'digest/md5'
 require 'erb'
+gem 'activesupport'
+require 'active_support/core_ext/class/attribute_accessors'
  
 
 module Vtiger
+  class Api
+  @@api_settings = {}
+   cattr_accessor :api_settings
+  end
   class Commands < Vtiger::Base
     attr_accessor  :product_id, :qty_in_stock, :new_quantity, :object_id, :account_name
    

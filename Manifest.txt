@@ -12,6 +12,7 @@ bin/yahoo_csv.rb
 bin/update_stock_inventory.rb
 bin/add_lead.rb
 bin/describe_object.rb
+bin/helloworld.rb
 bin/query.rb
 bin/list_types.rb
 script/console

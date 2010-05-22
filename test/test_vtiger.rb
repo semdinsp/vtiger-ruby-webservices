@@ -17,6 +17,35 @@ class TestVtiger < Test::Unit::TestCase
      assert challenge,"challenge is false"
      assert login,"login is false"
   end
+   
+  def test_api_login
+    Vtiger::Api.api_settings = {
+         :username => 'admin',
+         :key => 'xBY6leZ5kZHQm2Y',
+         :url => 'democrm.estormtech.com',
+         :element_type => 'Contacts'
+       }
+     cmd = Vtiger::Commands.new()
+     challenge=cmd.challenge({})
+     login=cmd.login({})
+     assert challenge,"challenge is false"
+     assert login,"login is false"
+  end
+  def test_api_login2
+    Vtiger::Api.api_settings = {
+         :username => 'admin',
+         :key => 'xBY6leZ5kZHQm2Y',
+         :url => 'democrm.estormtech.com',
+         :element_type => 'Contacts'
+       }
+     cmd = Vtiger::Commands.new()
+     options={}
+     options[:username]='admin'
+     challenge=cmd.challenge(options)
+     login=cmd.login(options)
+     assert challenge,"challenge is false"
+     assert login,"login is false"
+  end
   def test_bad_login
      cmd = Vtiger::Commands.new()
      @options[:username]='test'

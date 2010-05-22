@@ -17,9 +17,9 @@ module Vtiger
      def challenge(options)
 
        #puts "in challenge"
-       self.url=options[:url]
-       self.username = options[:username]
-       self.access_key = options[:key]
+       self.url=options[:url] || Vtiger::Api.api_settings[:url]
+       self.username = options[:username]|| Vtiger::Api.api_settings[:username]
+       self.access_key = options[:key] || Vtiger::Api.api_settings[:key]
        self.endpoint_url="http://#{self.url}/webservice.php?"
        operation = "operation=getchallenge&username=#{self.username}"; 
         #puts "challenge: " + self.endpoint_url + operation

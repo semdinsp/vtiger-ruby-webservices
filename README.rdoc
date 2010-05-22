@@ -1,10 +1,23 @@
 = vtiger
 * http://estormtech.com
-This gem provides access to vtiger from ruby.  It uses the vtiger web services to access the data in  vtiger system.  
+This gem provides access to vtiger from ruby.  It uses the vtiger web services to access the data in  vtiger system. 
+
+More info:  scott.sproule@estormtech.com 
 
 == DESCRIPTION:
 
-some common scripts for setting up files for estormtech.  Private.
+There are a set of base commands  (eg hpttp get, http post, login, challenge etc)
+And commands which are more specific to the actual usage such as addlead, describe object
+
+Options can be passed as hash  or preset using a Class variable  (which is why the cattr_accessor definition is required from activesupport)
+
+Vtiger::API.api_settings = {
+    :username => 'admin',
+    :key => '662b407ded7138f10ea7b41561f25694'
+    :url => 'democrm.estormtech.com'
+  }
+
+
 
 == FEATURES/PROBLEMS:
 
@@ -12,7 +25,16 @@ some common scripts for setting up files for estormtech.  Private.
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+  	 Vtiger::Api.api_settings = {
+       :username => 'admin',
+       :key => 'xBY6leZ5kZHQm2Y',
+       :url => 'democrm.estormtech.com',
+       :element_type => 'Contacts'
+     }
+   cmd = Vtiger::Commands.new()
+   challenge=cmd.challenge({})
+   login=cmd.login({})
+    cmd.add_lead  etc...
 
 == REQUIREMENTS:
 
