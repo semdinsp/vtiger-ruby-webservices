@@ -24,3 +24,17 @@ Dir['tasks/**/*.rake'].each { |t| load t }
 # TODO - want other tests/tasks run by default? Add them to the list
 # remove_task :default
 # task :default => [:spec, :features]
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gemspec|
+    gemspec.name = "vtiger"
+    gemspec.summary = "Vtiger support of webservices from ruby"
+    gemspec.description = "vtiger webservice calls"
+    gemspec.email = "scott.sproule@estormtech.com"
+    gemspec.homepage = "http://github.com/semdinsp/vtiger-ruby-webservices"
+    gemspec.authors = ["Scott Sproule"]
+  end
+  Jeweler::GemcutterTasks.new
+rescue LoadError
+  puts "Jeweler not available. Install it with: sudo gem install jeweler -s http://gemcutter.org"
+end

@@ -4,7 +4,7 @@
 # == Usage
 #  yahoo_csv.rb -u vtiger_url  -e Contacts  -n username -k access_key  -f csvfilename
 # == Useful commands
-#  yahoo_csv.rb -u testsmartroam.estormtech.com -e Contacts  -n admin -k ZZTjoVZ2SRl3rhFj   -f csvfilename
+#  yahoo_csv.rb -u testsmartroam.estormtech.com -e Contacts  -n admin -k xxx   -f csvfilename
 # == Author
 #   Scott Sproule  --- Ficonab.com (scott.sproule@ficonab.com)
 # == Copyright

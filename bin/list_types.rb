@@ -5,7 +5,7 @@
 #  jruby -S list_types.rb -u website  -n username -k accesskey
 # 
 # == Useful commands
-#  jruby -S list_types.rb -u democrm.estormtech.com  -n scott -k gvKxiF0bx94xt9U
+#  list_types.rb -u democrm.estormtech.com  -n scott -k xxx
 # == Author
 #   Scott Sproule  --- Ficonab.com (scott.sproule@ficonab.com)
 # == Copyright
