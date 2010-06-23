@@ -66,6 +66,19 @@ class TestVtiger < Test::Unit::TestCase
      assert lead,"lead should succeed"
   end
   
+  def test_add_trouble_ticket
+     cmd = Vtiger::Commands.new()
+     challenge=cmd.challenge(@options)
+     login=cmd.login(@options)
+     hv={}
+    # hv[:firstname]='test'
+     tt,ticketnum=cmd.add_trouble_ticket(@options,"Open","testing title",hv)
+     
+     puts "trouble ticket is #{tt} ticket number is #{ticketnum}"
+     assert challenge,"challenge is false "
+     assert login,"login should succeed"
+     assert tt,"trouble ticket should succeed"
+  end
   
   def test_describe_object
       cmd = Vtiger::Commands.new()

@@ -34,7 +34,8 @@ module Vtiger
                                                                                           }                                          
         opts.on("-D","--email VAL", String) {|val|  temp_hash[:email ] = val
                                                      temp_hash[:destination]=val }
-
+       opts.on("-t","--title VAL", String) {|val|  temp_hash[:title ] = val                                                                                             
+                                                 }
     
       opts.on("-c","--contact VAL", String) {|val|  temp_hash[:contact ] = val 
                                               puts "contact #{val}"     }  

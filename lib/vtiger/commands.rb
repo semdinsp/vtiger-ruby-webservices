@@ -1,7 +1,8 @@
 require 'net/http'
-require 'json'
+#require 'yajl'
 #require 'digest/md5'
 require 'erb'
+require 'rubygems'
 gem 'activesupport'
 require 'active_support/core_ext/class/attribute_accessors'
  
@@ -32,6 +33,23 @@ module Vtiger
       # puts JSON.pretty_generate(result)
       result["success"]
     end
+    def add_trouble_ticket(options,status,title,hashv)
+       puts "in add trouble ticket"
+       object_map= { 'assigned_user_id'=>"#{self.userid}",'ticketstatus'=>"#{status}", 'ticket_title'=>"#{title}"}
+       object_map=object_map.merge hashv
+       # 'tsipid'=>"1234"
+       tmp=self.json_please(object_map)
+       input_array ={'operation'=>'create','elementType'=>"HelpDesk",'sessionName'=>"#{self.session_name}", 'element'=>tmp} # removed the true
+       puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
+       # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
+       result = http_crm_post("operation=create",input_array)
+       puts "#{result.inspect}"
+      # self.session_name=result["result"]["sessionName"]
+       # puts JSON.pretty_generate(result)
+       ttnumber="invalid"
+       ttnumber =result["result"]["ticket_no"]  if result["success"]
+       return result["success"],ttnumber 
+     end
     def action(options)
       puts "in action"
     end

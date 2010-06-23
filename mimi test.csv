@@ -1,3 +1,3 @@
-email,lastname,company,,,,,,,
-scott.sproule@estormtech.com,scott sproule,org1,,,,,,,
-eka.mardiarti@estormtech.com,mardiarti,org2,,,,,,,
+email,lastname,company,phone,website,,,,,
+scott.sproule@estormtech.com,scott sproule,org1,1234,,,,,,
+eka.mardiarti@estormtech.com,mardiarti,org2,,test,,,,,

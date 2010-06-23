@@ -2,10 +2,10 @@
 # == Synopsis
 #   Add a contact to vtiger 
 # == Usage
-#  add_contact.rb -u vtiger_url  -e Contacts  -n username -k access_key -c contactName
+#  add_trouble_ticket.rb -u vtiger_url  -e HelpDesk  -n username -k access_key -c contactName
 # Note -a flag for response  --- eg true or false
 # == Useful commands
-#  add_lead.rb -u democrm.estormtech.com -c test -e Contacts  -n scott -k xxxxx 
+#  add_trouble_ticket.rb -u democrm.estormtech.com -t titletest -e HelpDesk  -n scott -k xxxxx 
 # == Author
 #   Scott Sproule  --- Ficonab.com (scott.sproule@ficonab.com)
 # == Copyright
@@ -27,13 +27,13 @@ require 'pp'
   options = arg_hash
    # set up variables using hash
    
-   puts "vtiger add contact #{Time.now}"
+   puts "vtiger add trouble ticket #{Time.now}"
    puts "vtiger url: #{arg_hash[:url]} "
     puts "vtiger contact: #{arg_hash[:contact]} "
     cmd = Vtiger::Commands.new()
     cmd.challenge(options)
     cmd.login(options)
-    cmd.addlead(options)
+    cmd.add_trouble_ticket(options,"Open",arg_hash[:title],{})
   #   consumer_session.close
    #  puts "#{result}"
  #  sleep(1)
@@ -41,4 +41,3 @@ require 'pp'
   
     
     puts  '-------------finished processing!!!'
- 

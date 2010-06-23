@@ -37,7 +37,7 @@ Vtiger::API.api_settings = {
     cmd.add_lead  etc...
 
 == REQUIREMENTS:
-
+now using yajl as  replacement to json.gem
 
 
 == INSTALL:

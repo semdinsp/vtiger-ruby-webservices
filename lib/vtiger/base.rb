@@ -1,5 +1,6 @@
 require 'net/http'
-require 'json'
+#require 'yajl'
+require 'yajl'
 require 'digest/md5'
 require 'erb'
  class Hash  
@@ -49,11 +50,12 @@ module Vtiger
 
            body_enc=body.url_encode
           # puts "attemping post: #{self.endpoint_url}#{operation} body: #{body} body_enc= #{body_enc}"
-           response=ht.post(self.endpoint_url+operation,body_enc,response_header)
+           resp=ht.post(self.endpoint_url+operation,body_enc,response_header)
 
            # p response.body.to_s
-            r=JSON.parse response.body
-            r
+           self.json_parse resp.body
+           # r=JSON.parse response.body
+          #  r
         end
         def http_ask_get(input_url)
          # puts "about to HTTP.get on '#{input_url}'"
@@ -70,8 +72,8 @@ module Vtiger
 
 
          # puts "resp: " + resp 
-          r=JSON.parse resp.body
-          r
+          self.json_parse resp.body
+       #   r
         end
 
         def login(options)
@@ -109,13 +111,9 @@ def describe_object(options)
             # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
             result = http_ask_get(self.endpoint_url+"operation=describe&sessionName=#{self.session_name}&elementType=#{options[:element_type]}")
            # puts JSON.pretty_generate(result)
-           if defined? RAILS_ENV
-              puts "in JSON code rails env: #{RAILS_ENV}"
-               puts object_map.to_json
-           else
-             puts "rails env is not defined"
-             puts self.json_please(result)    #scott  tmp=JSON.generate(object_map)
-           end
+         
+          puts "#{result.inspect}"    #scott  tmp=JSON.generate(object_map)
+           
 end
 def addobject(options)
           puts "in addobject"
@@ -129,15 +127,27 @@ def addobject(options)
          # self.session_name=result["result"]["sessionName"]
          #  puts JSON.pretty_generate(result)
 end
+def json_parse(incoming)
+   json = StringIO.new(incoming)
+   parser = Yajl::Parser.new
+   hash = parser.parse(json)
+end
 def json_please(object_map)
    if defined? RAILS_ENV
        #puts "in JSON code rails env: #{RAILS_ENV}"
         tmp=object_map.to_json
     else
       puts "rails env is not defined"
-      tmp=JSON.fast_generate(object_map)   #scott  tmp=JSON.generate(object_map)
+   #   json = StringIO.new()
+      str = Yajl::Encoder.encode(object_map)
+      
+   #    parser = Yajl::Parser.new
+    #   tmp = parser.parse(object_map.to_s)
+        #   object_map.to_json    #  can remove eventually this if statements
+      
+     # tmp=YAJL.generate(object_map)   #scott  tmp=JSON.generate(object_map)
     end
-    tmp
+    str
 end
 def updateobject(values)
             #puts "in updateobject"
