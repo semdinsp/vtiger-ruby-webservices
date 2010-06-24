@@ -68,14 +68,27 @@ module Vtiger
             #    puts "url path is #{url.path}"
                 http.request(req)
               }
-          #   puts resp.body
+           # puts "HTTP_ASK_GET" + resp.body.to_s
 
 
          # puts "resp: " + resp 
           self.json_parse resp.body
        #   r
         end
-
+        def add_object(object_map,hashv,element)
+          object_map=object_map.merge hashv
+          # 'tsipid'=>"1234"
+          tmp=self.json_please(object_map)
+          input_array ={'operation'=>'create','elementType'=>"#{element}",'sessionName'=>"#{self.session_name}", 'element'=>tmp} # removed the true
+          puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
+          # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
+          result = http_crm_post("operation=create",input_array)
+         # self.session_name=result["result"]["sessionName"]
+          # puts JSON.pretty_generate(result)
+          success=result['success']
+          id =result["result"]['id'] if success
+          return success,id
+        end
         def login(options)
          # puts "in login"
           input_array ={'operation'=>'login', 'username'=>self.username, 'accessKey'=>self.md5} # removed the true

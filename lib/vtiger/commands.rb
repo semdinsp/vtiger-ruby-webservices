@@ -22,33 +22,23 @@ module Vtiger
     def addlead(options,ln,co,hashv)
       puts "in addobject"
       object_map= { 'assigned_user_id'=>"#{self.userid}",'lastname'=>"#{ln}", 'company'=>"#{co}"}
-      object_map=object_map.merge hashv
-      # 'tsipid'=>"1234"
-      tmp=self.json_please(object_map)
-      input_array ={'operation'=>'create','elementType'=>"Leads",'sessionName'=>"#{self.session_name}", 'element'=>tmp} # removed the true
-      puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
-      # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
-      result = http_crm_post("operation=create",input_array)
-     # self.session_name=result["result"]["sessionName"]
-      # puts JSON.pretty_generate(result)
-      result["success"]
+      add_object(object_map,hashv,'Leads')
+    end
+     def add_contact(options,ln,email,hashv)
+        puts "in contact"
+        object_map= { 'assigned_user_id'=>"#{self.userid}",'lastname'=>"#{ln}", 'email'=>"#{email}"}
+        add_object(object_map,hashv,'Contacts')
+      end
+    def find_contact_by_email_or_add(options,ln,email,hashv)
+      success,id = query_element_by_email(email,"Contacts")
+      success,id =add_contact(options,ln,email,hashv) if !success         
     end
     def add_trouble_ticket(options,status,title,hashv)
        puts "in add trouble ticket"
        object_map= { 'assigned_user_id'=>"#{self.userid}",'ticketstatus'=>"#{status}", 'ticket_title'=>"#{title}"}
        object_map=object_map.merge hashv
        # 'tsipid'=>"1234"
-       tmp=self.json_please(object_map)
-       input_array ={'operation'=>'create','elementType'=>"HelpDesk",'sessionName'=>"#{self.session_name}", 'element'=>tmp} # removed the true
-       puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
-       # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
-       result = http_crm_post("operation=create",input_array)
-       puts "#{result.inspect}"
-      # self.session_name=result["result"]["sessionName"]
-       # puts JSON.pretty_generate(result)
-       ttnumber="invalid"
-       ttnumber =result["result"]["ticket_no"]  if result["success"]
-       return result["success"],ttnumber 
+       add_object(object_map,hashv,'HelpDesk')
      end
     def action(options)
       puts "in action"
@@ -119,6 +109,22 @@ module Vtiger
           #  self.new_quantity = self.qty_in_stock.to_i + options[:quantity].to_i
            #  updateobject(options,{'qtyinstock'=> "#{self.new_quantity}","productname"=>"#{options[:productname]}"})
         end
+         def query_element_by_email(email,element)
+            puts "in query contact"
+              action_string=ERB::Util.url_encode("select id from #{element} where email like '#{email}';")
+              puts "action string:" +action_string
+              res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
+              values=res["result"][0] if res["success"]==true   #comes back as array
+              #puts values.inspect
+              # return the account id
+               self.object_id = 'failed'
+               if values!= nil 
+                 self.object_id=values["id"]
+                 self.account_name=values["accountname"] 
+               end
+               return res["success"],self.object_id
+
+          end
         def query_product_inventory(options)
           puts "in query product count"
            #&username=#{self.username}&accessKey=#{self.md5}

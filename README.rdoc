@@ -21,7 +21,12 @@ Vtiger::API.api_settings = {
 
 == FEATURES/PROBLEMS:
 
-* TBD
+many commands to add via webservices including add trouble ticket, add contact etc.
+queries,
+describe object
+list entities 
+
+are all running
 
 == SYNOPSIS:
 

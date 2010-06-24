@@ -46,6 +46,20 @@ class TestVtiger < Test::Unit::TestCase
      assert challenge,"challenge is false"
      assert login,"login is false"
   end
+ 
+  def test_find_or_add_contact
+       cmd = Vtiger::Commands.new()
+       @options[:username]='admin'
+       challenge=cmd.challenge(@options)
+       login=cmd.login(@options)
+       success,id=cmd.find_contact_by_email_or_add(@options,'sproule','scott.sproule@gmail.com',{})
+       assert challenge,"challenge is false "
+       assert login,"login should  succeed"
+       assert success,"find contact should success"
+       assert id=='4x173', "id is #{id}"
+       puts "id is #{id}"
+
+    end
   def test_bad_login
      cmd = Vtiger::Commands.new()
      @options[:username]='test'
@@ -54,17 +68,42 @@ class TestVtiger < Test::Unit::TestCase
      assert challenge,"challenge is false "
      assert !login,"login should not succeed"
   end
+  def test_query_contact
+      cmd = Vtiger::Commands.new()
+      @options[:username]='admin'
+      challenge=cmd.challenge(@options)
+      login=cmd.login(@options)
+      success,id=cmd.query_element_by_email("scott.sproule@gmail.com","Contacts")
+      assert challenge,"challenge is false "
+      assert login,"login should  succeed"
+      assert success,"find contact should success"
+      puts "id is #{id}"
+      
+   end
   def test_add_lead
      cmd = Vtiger::Commands.new()
      challenge=cmd.challenge(@options)
      login=cmd.login(@options)
      hv={}
      hv[:firstname]='test'
-     lead=cmd.addlead(@options,"testlastname","testco",hv)
+     success,id=cmd.addlead(@options,"testlastname","testco",hv)
      assert challenge,"challenge is false "
      assert login,"login should succeed"
-     assert lead,"lead should succeed"
+     assert success,"lead should succeed"
+     puts "id is #{id}"
   end
+  def test_add_contact
+      cmd = Vtiger::Commands.new()
+      challenge=cmd.challenge(@options)
+      login=cmd.login(@options)
+      hv={}
+      hv[:firstname]='test'
+      success,id=cmd.add_contact(@options,"testlastname","scott.sproule@gmail.com",hv)
+      assert challenge,"challenge is false "
+      assert login,"login should succeed"
+      assert success,"add should succeed"
+      puts "id is #{id}"
+   end
   
   def test_add_trouble_ticket
      cmd = Vtiger::Commands.new()
