@@ -33,7 +33,8 @@ require 'pp'
     cmd = Vtiger::Commands.new()
     cmd.challenge(options)
     cmd.login(options)
-    cmd.addlead(options)
+    cmd.addlead(options,arg_hash[:username],'test company',{hashv}})
+  
   #   consumer_session.close
    #  puts "#{result}"
  #  sleep(1)

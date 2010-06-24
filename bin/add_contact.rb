@@ -33,7 +33,7 @@ require 'pp'
     cmd = Vtiger::Commands.new()
     cmd.challenge(options)
     cmd.login(options)
-    cmd.addobject(options)
+    cmd.add_contact(options,ln,arg_hash[:email],options)
   #   consumer_session.close
    #  puts "#{result}"
  #  sleep(1)

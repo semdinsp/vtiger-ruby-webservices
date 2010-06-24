@@ -31,7 +31,8 @@ module Vtiger
       end
     def find_contact_by_email_or_add(options,ln,email,hashv)
       success,id = query_element_by_email(email,"Contacts")
-      success,id =add_contact(options,ln,email,hashv) if !success         
+      success,id =add_contact(options,ln,email,hashv) if !success     
+      return success,id    
     end
     def add_trouble_ticket(options,status,title,hashv)
        puts "in add trouble ticket"
