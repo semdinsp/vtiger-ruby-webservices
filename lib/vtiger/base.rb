@@ -38,7 +38,7 @@ module Vtiger
         #access key from my_preferences page of vtiger
         digest_string="#{self.token}#{self.access_key}"
         self.md5=Digest::MD5.hexdigest(digest_string)
-        puts "#{self.url}: string #{digest_string} results in digest: "+self.md5 + " access key: "+ self.access_key + " token: " + self.token
+       # puts "#{self.url}: string #{digest_string} results in digest: "+self.md5 + " access key: "+ self.access_key + " token: " + self.token
       end
        def http_crm_post(operation, body)
           response = nil
@@ -80,7 +80,7 @@ module Vtiger
           # 'tsipid'=>"1234"
           tmp=self.json_please(object_map)
           input_array ={'operation'=>'create','elementType'=>"#{element}",'sessionName'=>"#{self.session_name}", 'element'=>tmp} # removed the true
-          puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
+         # puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
           # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
           result = http_crm_post("operation=create",input_array)
          # self.session_name=result["result"]["sessionName"]
@@ -92,12 +92,12 @@ module Vtiger
         def login(options)
          # puts "in login"
           input_array ={'operation'=>'login', 'username'=>self.username, 'accessKey'=>self.md5} # removed the true
-          puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
+          #puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
           # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
           result = http_crm_post("operation=login",input_array)
           self.session_name=result["result"]["sessionName"] if result["result"]!=nil
           self.userid = result["result"]["userId"] if result["result"]!=nil
-          puts "session name is: #{self.session_name} userid #{self.userid}"
+        #  puts "session name is: #{self.session_name} userid #{self.userid}"
           self.userid!=nil
         end
 def retrieve_object(objid)
@@ -134,7 +134,7 @@ def addobject(options)
           # 'tsipid'=>"1234"
           tmp=self.json_please(object_map)
           input_array ={'operation'=>'create','elementType'=>"#{options[:element_type]}",'sessionName'=>"#{self.session_name}", 'element'=>tmp} # removed the true
-          puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
+         # puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
           # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
           result = http_crm_post("operation=create",input_array)
          # self.session_name=result["result"]["sessionName"]
@@ -150,7 +150,7 @@ def json_please(object_map)
        #puts "in JSON code rails env: #{RAILS_ENV}"
         tmp=object_map.to_json
     else
-      puts "rails env is not defined"
+     # puts "rails env is not defined"
    #   json = StringIO.new()
       str = Yajl::Encoder.encode(object_map)
       

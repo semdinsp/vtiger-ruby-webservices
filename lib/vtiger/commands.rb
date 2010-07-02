@@ -94,7 +94,7 @@ module Vtiger
             # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
             action_string=ERB::Util.url_encode("select id,lastname from #{options[:element_type]} where #{fieldmapping[:tsipid]} = '#{id}';")
           #  action_string=ERB::Util.url_encode("select id,accountname from #{options[:element_type]} where #{fieldmapping[:tsipid]} = '#{id}';")  ACCOUNTS
-            puts "action string:" +action_string
+         #   puts "action string:" +action_string
             res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
             # http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&userId=#{self.userid}&query="+action_string)
          #   puts JSON.pretty_generate(res)
@@ -111,9 +111,9 @@ module Vtiger
            #  updateobject(options,{'qtyinstock'=> "#{self.new_quantity}","productname"=>"#{options[:productname]}"})
         end
          def query_element_by_email(email,element)
-            puts "in query contact"
+            puts "in query element by email"
               action_string=ERB::Util.url_encode("select id from #{element} where email like '#{email}';")
-              puts "action string:" +action_string
+           #   puts "action string:" +action_string
               res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
               values=res["result"][0] if res["success"]==true   #comes back as array
               #puts values.inspect
@@ -121,17 +121,33 @@ module Vtiger
                self.object_id = 'failed'
                if values!= nil 
                  self.object_id=values["id"]
-                 self.account_name=values["accountname"] 
+                # self.account_name=values["accountname"] 
                end
                return res["success"],self.object_id
-
           end
+              def find_tt_by_contact(contact)
+                  puts "in query tt by contact"
+                    action_string=ERB::Util.url_encode("select id,ticket_no from HelpDesk where parent_id = '#{contact}';")
+                #    puts "action string:" +action_string
+                    res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
+                    puts "TT RES: #{res["result"]} class: #{res["result"].class}"
+                    values=res["result"] if res["success"]==true   #comes back as array
+                    #puts values.inspect
+                    # return the account id
+                     ticketlist=[]
+                     values.each {|v| ticketlist << v['ticket_no'] }
+                     return res["success"],ticketlist
+
+                end
+        def  run_rules(test)
+            yield(test)
+        end
         def query_product_inventory(options)
           puts "in query product count"
            #&username=#{self.username}&accessKey=#{self.md5}
             # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
             action_string=ERB::Util.url_encode("select id, qtyinstock, productname from Products where productname like '#{options[:productname]}';")
-            puts "action string:" +action_string
+            #puts "action string:" +action_string
             res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
             # http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&userId=#{self.userid}&query="+action_string)
             puts JSON.pretty_generate(res)

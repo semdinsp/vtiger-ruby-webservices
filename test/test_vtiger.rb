@@ -118,7 +118,32 @@ class TestVtiger < Test::Unit::TestCase
      assert login,"login should succeed"
      assert tt,"trouble ticket should succeed"
   end
-  
+  def test_rule_block
+      cmd = Vtiger::Commands.new()
+      challenge=cmd.challenge(@options)
+      login=cmd.login(@options)
+      res=cmd.run_rules("hello") {|t|   puts "RULE BLOCK #{t} what is self? #{self.inspect} class #{self.class}"
+                                       return t=="hello"}
+       assert challenge,"challenge is false "
+       assert login,"login should succeed"
+       assert res,"rules should succeed"
+  end
+  def test_find_trouble_ticket_by_contacts
+     cmd = Vtiger::Commands.new()
+     challenge=cmd.challenge(@options)
+     login=cmd.login(@options)
+     hv={}
+    # hv[:firstname]='test'
+     success,contact_id=cmd.query_element_by_email("scott.sproule@gmail.com","Contacts")
+     tt,ticketlist=cmd.find_tt_by_contact(contact_id) if success
+     
+     puts "trouble ticket is #{tt} ticket number is #{ticketlist}"
+     assert challenge,"challenge is false "
+     assert success,"could not find contact id with email scott.sproule@gmail.com  "
+     assert login,"login should succeed"
+     assert tt,"trouble ticket findersshould succeed"
+     puts "tickelist is #{ticketlist}"
+  end
   def test_describe_object
       cmd = Vtiger::Commands.new()
       challenge=cmd.challenge(@options)
