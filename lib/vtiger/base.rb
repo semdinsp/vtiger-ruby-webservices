@@ -148,7 +148,7 @@ end
 def json_please(object_map)
    if defined? RAILS_ENV
        #puts "in JSON code rails env: #{RAILS_ENV}"
-        tmp=object_map.to_json
+        str=object_map.to_json
     else
      # puts "rails env is not defined"
    #   json = StringIO.new()
@@ -164,11 +164,14 @@ def json_please(object_map)
 end
 def updateobject(values)
             #puts "in updateobject"
-            object_map= { 'assigned_user_id'=>"#{self.userid}",'id'=>"#{self.object_id}" }.merge values.to_hash
+           # object_map= { 'assigned_user_id'=>"#{self.userid}"}.merge  values.to_hash
+           object_map= {'id'=>"#{self.object_id}" }.merge values.to_hash
+            #object_map['assigned_user_id']="#{self.userid}"
             # 'tsipid'=>"1234"
+           # puts "object map is #{object_map.to_s}"
             tmp=self.json_please(object_map)
             input_array ={'operation'=>'update','sessionName'=>"#{self.session_name}", 'element'=>tmp} # removed the true
-            #puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
+            puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
             # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
             result = http_crm_post("operation=update",input_array)
            # self.session_name=result["result"]["sessionName"]

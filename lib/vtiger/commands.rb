@@ -116,14 +116,17 @@ module Vtiger
            #   puts "action string:" +action_string
               res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
               values=res["result"][0] if res["success"]==true   #comes back as array
+              success = false
               #puts values.inspect
               # return the account id
                self.object_id = 'failed'
                if values!= nil 
                  self.object_id=values["id"]
+                 success=true
                 # self.account_name=values["accountname"] 
                end
-               return res["success"],self.object_id
+               
+               return  success,self.object_id
           end
               def find_tt_by_contact(contact)
                   puts "in query tt by contact"

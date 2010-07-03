@@ -104,6 +104,23 @@ class TestVtiger < Test::Unit::TestCase
       assert success,"add should succeed"
       puts "id is #{id}"
    end
+   def test_update_contact
+     puts "in update contact"
+       cmd = Vtiger::Commands.new()
+       challenge=cmd.challenge(@options)
+       login=cmd.login(@options)
+       hv={}
+     
+       success,id=cmd.query_element_by_email("scott.sproule@gmail.com","Contacts")
+        values=cmd.retrieve_object(id)
+        values['firstname']='testupdtae'
+        upd= cmd.updateobject(values)
+       assert challenge,"challenge is false "
+       assert login,"login should succeed"
+       assert success,"add should succeed"
+        assert upd,"update should succeed"
+       puts "id is #{id}"
+    end
   
   def test_add_trouble_ticket
      cmd = Vtiger::Commands.new()
