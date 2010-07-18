@@ -112,9 +112,10 @@ module Vtiger
         end
          def query_element_by_email(email,element)
             puts "in query element by email"
-              action_string=ERB::Util.url_encode("select id from #{element} where email like '#{email}';")
-              action_string=ERB::Util.url_encode("select id from #{element} where email1 like '#{email}';") if element=='Accounts'
-           #   puts "action string:" +action_string
+              field='email'
+              field='email1' if element=='Accounts'
+              action_string=ERB::Util.url_encode("select id from #{element} where #{field} like '#{email}';")
+            #   puts "action string:" +action_string
               res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
               values=res["result"][0] if res["success"]==true   #comes back as array
               success = false

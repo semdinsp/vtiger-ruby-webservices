@@ -176,6 +176,21 @@ class TestVtiger < Test::Unit::TestCase
      assert tt,"trouble ticket findersshould succeed"
      puts "tickelist is #{ticketlist}"
   end
+  def test_find_account_by_email
+     puts "in find account by email"
+     cmd = Vtiger::Commands.new()
+     challenge=cmd.challenge(@options)
+     login=cmd.login(@options)
+     hv={}
+    # hv[:firstname]='test'
+     success,account_id=cmd.query_element_by_email("scott.sproule@gmail.com","Accounts")
+     assert challenge,"challenge is false "
+     assert success,"could not find account id with email scott.sproule@gmail.com  "
+     assert login,"login should succeed"
+     puts "ACCOUNT ID IS  #{account_id}"
+     assert account_id=='3x269',"account id should be #{account_id}"
+    # puts "tickelist is #{ticketlist}"
+  end
   def test_describe_object
       cmd = Vtiger::Commands.new()
       challenge=cmd.challenge(@options)

@@ -29,6 +29,8 @@ many commands are supported
 
 are all running
 
+Now has find_by_email_id
+
 == SYNOPSIS:
 
   	 Vtiger::Api.api_settings = {
