@@ -113,6 +113,7 @@ module Vtiger
          def query_element_by_email(email,element)
             puts "in query element by email"
               action_string=ERB::Util.url_encode("select id from #{element} where email like '#{email}';")
+              action_string=ERB::Util.url_encode("select id from #{element} where email1 like '#{email}';") if element=='Accounts'
            #   puts "action string:" +action_string
               res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
               values=res["result"][0] if res["success"]==true   #comes back as array
@@ -128,7 +129,7 @@ module Vtiger
                
                return  success,self.object_id
           end
-              def find_tt_by_contact(contact)
+          def find_tt_by_contact(contact)
                   puts "in query tt by contact"
                     action_string=ERB::Util.url_encode("select id,ticket_no from HelpDesk where parent_id = '#{contact}';")
                 #    puts "action string:" +action_string
@@ -141,7 +142,20 @@ module Vtiger
                      values.each {|v| ticketlist << v['ticket_no'] }
                      return res["success"],ticketlist
 
-                end
+          end
+  def check_open_tt_by_contact(contact)
+                   puts "in query open tt by contact"
+                   action_string=ERB::Util.url_encode("select id,ticket_no from HelpDesk where parent_id = '#{contact}' and ticketstatus like 'Open';")
+                    #    puts "action string:" +action_string
+                   res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
+                   puts "TT RES: #{res["result"]} class: #{res["result"].class}"
+                   values=res["result"] if res["success"]==true   #comes back as array
+                        #puts values.inspect
+                        # return the account id
+                  ticketlist=[]
+                  values.each {|v| ticketlist << v['ticket_no'] }
+                  return res["success"],ticketlist
+ end        
         def  run_rules(test)
             yield(test)
         end

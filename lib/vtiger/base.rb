@@ -171,7 +171,7 @@ def updateobject(values)
            # puts "object map is #{object_map.to_s}"
             tmp=self.json_please(object_map)
             input_array ={'operation'=>'update','sessionName'=>"#{self.session_name}", 'element'=>tmp} # removed the true
-            puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
+         #   puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
             # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
             result = http_crm_post("operation=update",input_array)
            # self.session_name=result["result"]["sessionName"]

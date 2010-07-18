@@ -145,6 +145,21 @@ class TestVtiger < Test::Unit::TestCase
        assert login,"login should succeed"
        assert res,"rules should succeed"
   end
+  def test_find_open_trouble_ticket_by_contacts
+     cmd = Vtiger::Commands.new()
+     challenge=cmd.challenge(@options)
+     login=cmd.login(@options)
+     hv={}
+    # hv[:firstname]='test'
+     success,contact_id=cmd.query_element_by_email("scott.sproule@gmail.com","Contacts")
+     tt,ticketlist=cmd.check_open_tt_by_contact(contact_id) if success  
+     puts "trouble ticket is #{tt} ticket number is #{ticketlist}"
+     assert challenge,"challenge is false "
+     assert success,"could not find contact id with email scott.sproule@gmail.com  "
+     assert login,"login should succeed"
+     assert tt,"open trouble ticket findersshould succeed"
+     puts "tickelist is #{ticketlist}"
+  end
   def test_find_trouble_ticket_by_contacts
      cmd = Vtiger::Commands.new()
      challenge=cmd.challenge(@options)

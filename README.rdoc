@@ -25,6 +25,7 @@ many commands to add via webservices including add trouble ticket, add contact e
 queries,
 describe object
 list entities 
+many commands are supported
 
 are all running
 

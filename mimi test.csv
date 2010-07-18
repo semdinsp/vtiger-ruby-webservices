@@ -1,4 +1,5 @@
-email,lastname,company,phone,website,,,,,
-scott.sproule@estormtech.com,scott sproule,org1,1234,,,,,,
-eka.mardiarti@estormtech.com,mardiarti,org2,,test,,,,,
-charles@smartroam.net,tidsdwell,org4,12354,,,,,,
+email,lastname,company,phone,firstname,website
+scott.sproule@estormtech.com,sproule,org1,1234,scott,xxx.com
+eka.mardiarti@estormtech.com,mardiarti,org2,12345,eka,yyy.com
+charles@smartroam.net,tidsdwell,org4,12354,charles,333.com
+timothy@smartroam.net,timothy,org5,12354,timothy,444.com
