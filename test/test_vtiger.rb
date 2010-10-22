@@ -17,7 +17,17 @@ class TestVtiger < Test::Unit::TestCase
      assert challenge,"challenge is false"
      assert login,"login is false"
   end
-   
+def test_get_campaigns
+   cmd = Vtiger::Commands.new()
+   @options[:username]='admin'
+   challenge=cmd.challenge(@options)
+   login=cmd.login(@options)
+   success,values=cmd.get_campaigns()
+   assert challenge,"challenge is false "
+   assert login,"login should  succeed"
+   assert success,"find campaigns should success" 
+   puts "CAMPAIGNS #{values}"
+end
   def test_api_login
     Vtiger::Api.api_settings = {
          :username => 'admin',

@@ -33,7 +33,7 @@ require 'pp'
     cmd = Vtiger::Commands.new()
     cmd.challenge(options)
     cmd.login(options)
-    cmd.query(options)
+    puts cmd.query(options)
   #   consumer_session.close
    #  puts "#{result}"
  #  sleep(1)

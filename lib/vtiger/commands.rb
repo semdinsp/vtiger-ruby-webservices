@@ -144,6 +144,20 @@ module Vtiger
                      return res["success"],ticketlist
 
           end
+          
+def get_campaigns
+                    puts "in get campaigns"
+                      action_string=ERB::Util.url_encode("select id,campaignname from Campaigns;")
+                  #    puts "action string:" +action_string
+                      res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
+                      puts "TT RES: #{res["result"]} class: #{res["result"].class}"
+                      values=res["result"] if res["success"]==true   #comes back as array
+                      #puts values.inspect
+                      # return the account id
+                      ## values.each {|v| ticketlist << v['ticket_no'] }
+                       return res["success"],values
+
+end
   def check_open_tt_by_contact(contact)
                    puts "in query open tt by contact"
                    action_string=ERB::Util.url_encode("select id,ticket_no from HelpDesk where parent_id = '#{contact}' and ticketstatus like 'Open';")
