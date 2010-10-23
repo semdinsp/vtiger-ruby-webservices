@@ -1,8 +1,12 @@
 require 'net/http'
 #require 'yajl'
+require 'rubygems'
+gem 'yajl-ruby'
 require 'yajl'
 require 'digest/md5'
 require 'erb'
+#gem 'activerecord'
+require 'active_record'
  class Hash  
   def url_encode  
     to_a.map do |name_value|  
@@ -10,10 +14,32 @@ require 'erb'
      end.join '&'  
    end  
  end
-
+class CampaignList #< ActiveRecord::Base
+  
+  def scott_connect(dbhost, dbname, dbuser,dbpasswd)
+    #ActiveRecord::Base.set_table_name('vtiger_campaigncontrel')
+    @myconnection =ActiveRecord::Base.establish_connection(
+        :adapter  => "mysql",
+        :host     => dbhost,
+        :username => dbuser,
+        :password => dbpasswd,
+        :database => dbname
+      )
+  end
+  def convert(mysql_res)
+    rows=[]
+    mysql_res.each_hash { |h| rows << h
+      puts "h is #{h} #{h.inspect} #{h.class}"}
+    rows
+  end
+  def find_contacts_by_campaign(dbconn,id)
+    mysql_results=@myconnection.connection.execute("select vtiger_contactdetails.email, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,  vtiger_campaigncontrel.campaignid from vtiger_contactdetails left join vtiger_campaigncontrel on vtiger_contactdetails.contactid=vtiger_campaigncontrel.contactid where vtiger_campaigncontrel.campaignid=#{id} and emailoptout=0;")
+  self.convert(mysql_results)
+  end
+end
 module Vtiger
   class Base
-     attr_accessor :md5,:token, :endpoint_url, :access_key, :session_name, :url, :username,  :userid
+     attr_accessor :md5,:token, :endpoint_url, :access_key, :session_name, :url, :username,  :userid, :campaigndb
      
      def challenge(options)
 
@@ -176,6 +202,17 @@ def updateobject(values)
             result = http_crm_post("operation=update",input_array)
            # self.session_name=result["result"]["sessionName"]
            #  puts JSON.pretty_generate(result)
+end
+def accessdatabase(dbhost, dbname, dbuser,dbpasswd)
+  #select vtiger_contactdetails.email, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,  vtiger_campaigncontrel.campaignid from vtiger_contactdetails left join vtiger_campaigncontrel on vtiger_contactdetails.contactid=vtiger_campaigncontrel.contactid where vtiger_campaigncontrel.campaignid='14' and emailoptout=0;
+  self.campaigndb=CampaignList.new
+  self.campaigndb.scott_connect(dbhost, dbname, dbuser,dbpasswd)
+  
+  
+end
+def get_contacts_from_campaign(campaignid)
+  self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
+  
 end
   end #clase base
 end #moduble

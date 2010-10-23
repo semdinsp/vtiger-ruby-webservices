@@ -47,6 +47,9 @@ Now has find_by_email_id
 == REQUIREMENTS:
 now using yajl as  replacement to json.gem
 
+== DIRECT DB ACCESS
+Can now directly access Vtiger DB to run some queries.  See base.rb campaignlist etc.
+
 
 == INSTALL:
 

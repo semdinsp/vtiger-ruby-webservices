@@ -28,6 +28,15 @@ def test_get_campaigns
    assert success,"find campaigns should success" 
    puts "CAMPAIGNS #{values}"
 end
+def test_get_contacts_from_campaigns
+   cmd = Vtiger::Commands.new()
+   @options[:username]='admin'
+   challenge=cmd.challenge(@options)
+   login=cmd.login(@options)
+   success,values=cmd.get_campaigns()
+   require 'test_secret'
+   cmd.accessdatabase(VTIGERDBHOST, VTIGERDB, VTIGERDBUSER,VTIGERDBPASSWD)
+end
   def test_api_login
     Vtiger::Api.api_settings = {
          :username => 'admin',
