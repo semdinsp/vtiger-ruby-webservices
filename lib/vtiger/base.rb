@@ -14,11 +14,11 @@ require 'active_record'
      end.join '&'  
    end  
  end
-class CampaignList #< ActiveRecord::Base
+class CampaignList < ActiveRecord::Base
   
-  def scott_connect(dbhost, dbname, dbuser,dbpasswd)
-    #ActiveRecord::Base.set_table_name('vtiger_campaigncontrel')
-    @myconnection =ActiveRecord::Base.establish_connection(
+  def self.scott_connect(dbhost, dbname, dbuser,dbpasswd)
+    CampaignList.set_table_name('vtiger_campaigncontrel')
+    @myconnection =CampaignList.establish_connection(
         :adapter  => "mysql",
         :host     => dbhost,
         :username => dbuser,
@@ -26,15 +26,16 @@ class CampaignList #< ActiveRecord::Base
         :database => dbname
       )
   end
-  def convert(mysql_res)
+  def self.convert(mysql_res)
     rows=[]
     mysql_res.each_hash { |h| rows << h
-      puts "h is #{h} #{h.inspect} #{h.class}"}
+     # puts "h is #{h} #{h.inspect} #{h.class}"
+      }
     rows
   end
-  def find_contacts_by_campaign(dbconn,id)
-    mysql_results=@myconnection.connection.execute("select vtiger_contactdetails.email, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,  vtiger_campaigncontrel.campaignid from vtiger_contactdetails left join vtiger_campaigncontrel on vtiger_contactdetails.contactid=vtiger_campaigncontrel.contactid where vtiger_campaigncontrel.campaignid=#{id} and emailoptout=0;")
-  self.convert(mysql_results)
+  def self.find_contacts_by_campaign(id)
+    mysql_results=CampaignList.connection.execute("select vtiger_contactdetails.email, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,  vtiger_campaigncontrel.campaignid from vtiger_contactdetails left join vtiger_campaigncontrel on vtiger_contactdetails.contactid=vtiger_campaigncontrel.contactid where vtiger_campaigncontrel.campaignid=#{id} and emailoptout=0;")
+  CampaignList.convert(mysql_results)
   end
 end
 module Vtiger
@@ -205,13 +206,14 @@ def updateobject(values)
 end
 def accessdatabase(dbhost, dbname, dbuser,dbpasswd)
   #select vtiger_contactdetails.email, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,  vtiger_campaigncontrel.campaignid from vtiger_contactdetails left join vtiger_campaigncontrel on vtiger_contactdetails.contactid=vtiger_campaigncontrel.contactid where vtiger_campaigncontrel.campaignid='14' and emailoptout=0;
-  self.campaigndb=CampaignList.new
-  self.campaigndb.scott_connect(dbhost, dbname, dbuser,dbpasswd)
+  #self.campaigndb=CampaignList.new
+  CampaignList.scott_connect(dbhost, dbname, dbuser,dbpasswd)
   
   
 end
 def get_contacts_from_campaign(campaignid)
-  self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
+  #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
+  CampaignList.find_contacts_by_campaign(campaignid)
   
 end
   end #clase base

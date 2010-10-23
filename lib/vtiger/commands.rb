@@ -150,7 +150,7 @@ def get_campaigns
                       action_string=ERB::Util.url_encode("select id,campaignname from Campaigns;")
                   #    puts "action string:" +action_string
                       res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
-                      puts "TT RES: #{res["result"]} class: #{res["result"].class}"
+                   #   puts "TT RES: #{res["result"]} class: #{res["result"].class}"
                       values=res["result"] if res["success"]==true   #comes back as array
                       #puts values.inspect
                       # return the account id
@@ -163,7 +163,7 @@ end
                    action_string=ERB::Util.url_encode("select id,ticket_no from HelpDesk where parent_id = '#{contact}' and ticketstatus like 'Open';")
                     #    puts "action string:" +action_string
                    res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
-                   puts "TT RES: #{res["result"]} class: #{res["result"].class}"
+                #   puts "TT RES: #{res["result"]} class: #{res["result"].class}"
                    values=res["result"] if res["success"]==true   #comes back as array
                         #puts values.inspect
                         # return the account id
