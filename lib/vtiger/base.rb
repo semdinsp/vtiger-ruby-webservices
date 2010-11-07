@@ -37,6 +37,14 @@ class CampaignList < ActiveRecord::Base
     mysql_results=CampaignList.connection.execute("select vtiger_contactdetails.email, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,  vtiger_campaigncontrel.campaignid from vtiger_contactdetails left join vtiger_campaigncontrel on vtiger_contactdetails.contactid=vtiger_campaigncontrel.contactid where vtiger_campaigncontrel.campaignid=#{id} and emailoptout=0;")
   CampaignList.convert(mysql_results)
   end
+  def self.find_leads_by_campaign(id)
+    mysql_results=CampaignList.connection.execute("select vtiger_leaddetails.email, vtiger_leaddetails.firstname, vtiger_leaddetails.lastname,  vtiger_campaignleadrel.campaignid from vtiger_leaddetails left join vtiger_campaignleadrel on vtiger_leaddetails.leadid=vtiger_campaignleadrel.leadid where vtiger_campaignleadrel.campaignid=#{id};")
+  CampaignList.convert(mysql_results)
+  end
+  def self.find_accounts_by_campaign(id)
+    mysql_results=CampaignList.connection.execute("select vtiger_account.email1 as 'email', vtiger_account.accountname,   vtiger_campaignaccountrel.campaignid from vtiger_account left join vtiger_campaignaccountrel on vtiger_account.accountid=vtiger_campaignaccountrel.accountid where vtiger_campaignaccountrel.campaignid=#{id} and emailoptout=0;;")
+  CampaignList.convert(mysql_results)
+  end
 end
 module Vtiger
   class Base
@@ -210,6 +218,13 @@ def accessdatabase(dbhost, dbname, dbuser,dbpasswd)
   CampaignList.scott_connect(dbhost, dbname, dbuser,dbpasswd)
   
   
+end
+def get_list_from_campaign(campaignid,type)
+  #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
+  list=CampaignList.find_leads_by_campaign(campaignid) if type=='Leads'
+  list=CampaignList.find_accounts_by_campaign(campaignid) if type=='Accounts'
+  list=CampaignList.find_contacts_by_campaign(campaignid) if type=='Contacts'
+  list
 end
 def get_contacts_from_campaign(campaignid)
   #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
