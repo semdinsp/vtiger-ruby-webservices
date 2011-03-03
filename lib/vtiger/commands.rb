@@ -41,6 +41,20 @@ module Vtiger
        # 'tsipid'=>"1234"
        add_object(object_map,hashv,'HelpDesk')
      end
+    def add_email(options,status,title,hashv)
+          puts "in add email ticket NOT COMPLETE"
+          object_map= { 'assigned_user_id'=>"#{self.userid}",'ticketstatus'=>"#{status}", 'ticket_title'=>"#{title}"}
+          object_map=object_map.merge hashv
+          # 'tsipid'=>"1234"
+          add_object(object_map,hashv,'Emails')
+     end
+      def add_document(options,status,title,hashv)
+             puts "in add document NOT COMPLETE"
+             object_map= { 'assigned_user_id'=>"#{self.userid}",'ticketstatus'=>"#{status}", 'ticket_title'=>"#{title}"}
+             object_map=object_map.merge hashv
+             # 'tsipid'=>"1234"
+             add_object(object_map,hashv,'Documents')
+        end
     def action(options)
       puts "in action"
     end
@@ -144,11 +158,67 @@ module Vtiger
                      return res["success"],ticketlist
 
           end
+          #extraparams like ',cf_579'
+          # one day ago --- Time.now-60*60*24
+          # eg v.find_items_by_date('Contacts',to_s,'cf_579')
           
+          def find_items_by_date(element,date,extraparam=nil)
+                  puts "in query by date  "
+                    queryparams=''
+                    queryparams=",#{extraparam}" if extraparam!=nil
+                    t=Time.parse(date)
+                    y=t.strftime('%Y-%m-%d')
+                    action_string=ERB::Util.url_encode("select id#{queryparams} from #{element} where createdtime like '#{y}%';")
+                #    puts "action string:" +action_string
+                    res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
+                    puts "TT RES: #{res["result"]} class: #{res["result"].class}"
+                    values=res["result"] if res["success"]==true   #comes back as array
+              
+                     return res["success"],values
+
+          end
+             #extraparams like ',cf_579'
+              # one day ago --- Time.now-60*60*24
+              # eg v.find_items_by_date_and_key_not_null('Contacts',to_s,'cf_579',"")
+       def find_items_by_date_and_key_not_null(element,date,key, extraparam=nil)
+                    puts "in query by date and not null  "
+                      queryparams=''
+                      queryparams=",#{extraparam}" if extraparam!=nil
+                      t=Time.parse(date)
+                      y=t.strftime('%Y-%m-%d')
+                      action_string=ERB::Util.url_encode("select id,#{key}#{queryparams} from #{element} where createdtime like '#{y}%' and #{key}  LIKE '2%' and emailoptout=0;")
+                      puts "action string:" +action_string
+                      res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
+                      puts "TT RES: #{res["result"]} class: #{res["result"].class}"
+                      values=res["result"] if res["success"]==true   #comes back as array
+          
+                       return res["success"],values
+
+       end
+            #extraparams like ',cf_579'
+              # one day ago --- Time.now-60*60*24
+              # eg v.find_items_by_date_and_key_null('Contacts',to_s,'cf_579',"")
+       def find_items_by_date_and_key_null(element,date,key, extraparam=nil)
+         # NEED TO ADD QUERY SIZE CAPABILIIES
+                    puts "in query by date #{date} and not null  "
+                      queryparams=''
+                      queryparams=",#{extraparam}" if extraparam!=nil
+                      t=Time.parse(date)
+                      y=t.strftime('%Y-%m-%d')
+                    
+                       action_string=ERB::Util.url_encode("select id,#{key}#{queryparams} from #{element} where createdtime like '#{y}%' and #{key} < '0' and emailoptout=0;")
+                      puts "action string:" +action_string
+                      res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
+                      puts "TT RES: #{res["result"]} class: #{res["result"].class}"
+                      values=res["result"] if res["success"]==true   #comes back as array
+                   
+                       return res["success"],values
+
+       end
 def get_campaigns
                     puts "in get campaigns"
                       action_string=ERB::Util.url_encode("select id,campaignname from Campaigns;")
-                  #    puts "action string:" +action_string
+                  
                       res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
                    #   puts "TT RES: #{res["result"]} class: #{res["result"].class}"
                       values=res["result"] if res["success"]==true   #comes back as array

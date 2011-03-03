@@ -1,4 +1,5 @@
 #!/usr/bin/env jruby -S
+usage=<<EOF_USAGE
 # == Synopsis
 #   Update accounts or accounts based on yahoo statistics
 # == Usage
@@ -10,15 +11,15 @@
 # == Copyright
 #    Copyright (c) 2009 Ficonab Pte. Ltd.
 #     See license for license details
+EOF_USAGE
 require 'yaml'
 require 'rubygems'
 gem 'vtiger'
 require 'vtiger'
 require 'optparse'
-require 'rdoc/usage'
 require 'java' if RUBY_PLATFORM =~ /java/
  arg_hash=Vtiger::Options.parse_options(ARGV)
- RDoc::usage if arg_hash[:help]==true
+  Vtiger::Options.show_usage_exit(usage) if arg_hash[:help]==true
 require 'pp'
   options = arg_hash
    # set up variables using hash
