@@ -5,7 +5,6 @@ require 'rexml/document'
 #gem 'stomp_message'
 #require 'stomp_message'
 require 'optparse'
-require 'rdoc/usage'
 gem 'fastercsv'
 require 'fastercsv'
 
