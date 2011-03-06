@@ -10,7 +10,7 @@
 #rake gemcutter:release
 Gem::Specification.new do |s|
   s.name        = "vtiger"
-  s.version     = "0.6.1"
+  s.version     = "0.6.2"
   s.author      = "Scott Sproule"
   s.email       = "scott.sproule@estormtech.com"
   s.homepage    = "http://github.com/semdinsp/vtiger-ruby-webservices"

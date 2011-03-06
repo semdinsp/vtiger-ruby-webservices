@@ -7,10 +7,10 @@ require 'digest/md5'
 require 'erb'
 #gem 'activerecord'
 require 'active_record'
- class Hash  
+class Hash  
   def url_encode  
     to_a.map do |name_value|  
-      name_value.map { |e| CGI.escape e.to_s }.join '='  
+      name_value.map { |e| URI.encode e.to_s }.join '='  
      end.join '&'  
    end  
  end
@@ -50,9 +50,8 @@ module Vtiger
   class Base
      attr_accessor :md5,:token, :endpoint_url, :access_key, :session_name, :url, :username,  :userid, :campaigndb
      
-     def challenge(options)
-
-       #puts "in challenge"
+def challenge(options)
+    #   puts "in challenge"
        self.url=options[:url] || Vtiger::Api.api_settings[:url]
        self.username = options[:username]|| Vtiger::Api.api_settings[:username]
        self.access_key = options[:key] || Vtiger::Api.api_settings[:key]
@@ -60,15 +59,12 @@ module Vtiger
        operation = "operation=getchallenge&username=#{self.username}"; 
         #puts "challenge: " + self.endpoint_url + operation
         r=http_ask_get(self.endpoint_url+operation)
-       # puts JSON.pretty_generate(r)
-       # puts "success is: " + r["success"].to_s   #==true
         self.token = r["result"]["token"] #if r["success"]==true
 
-        #puts "token is: " + self.token
          create_digest
-        #puts "digest is: #{self.md5} token #{self.token}" 
+      #  puts "digest is: #{self.md5} token #{self.token}" 
         self.token!=nil
-     end
+end
      def create_digest
         #access key from my_preferences page of vtiger
         digest_string="#{self.token}#{self.access_key}"
@@ -82,7 +78,6 @@ module Vtiger
            t=URI.split(self.endpoint_url.to_s)
           # puts "host is: " + t[2]   #FIX THIS.
            ht =Net::HTTP.start(t[2],80)
-
            body_enc=body.url_encode
           # puts "attemping post: #{self.endpoint_url}#{operation} body: #{body} body_enc= #{body_enc}"
            resp=ht.post(self.endpoint_url+operation,body_enc,response_header)
@@ -109,6 +104,29 @@ module Vtiger
          # puts "resp: " + resp 
           self.json_parse resp.body
        #   r
+        end
+        def large_query(countquery, query)
+             qaction_string=ERB::Util.url_encode("#{countquery};")
+            res=http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+qaction_string)
+          #    puts "action string:" +action_string
+          puts "success: #{res['success']} res class #{res} count #{res['result']}"
+              temp=res['result'][0]    
+              puts "  temp: #{temp} class #{temp.class} inspect #{temp.inspect}"
+              count=temp['count'].to_i
+              s=count/100
+              puts "s is #{s}"
+              output=[]
+              finalres=true
+              0.upto(s) { |i| puts i 
+                  action_string=ERB::Util.url_encode("#{query} limit #{i*100},100;")
+                  puts "COUNT :#{i} #{action_string}"
+                  res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
+                  values=res["result"] if res["success"]==true
+                  finalres=finalres && res["success"]
+                  values.each {|i|  output << i }
+                 # output << values
+                }  
+             return finalres, output
         end
         def add_object(object_map,hashv,element)
           object_map=object_map.merge hashv

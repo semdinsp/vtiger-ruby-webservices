@@ -215,6 +215,17 @@ module Vtiger
                        return res["success"],values
 
        end
+def large_find_items_by_date_and_key_null(element,date,key, extraparam=nil)
+            # NEED TO ADD QUERY SIZE CAPABILIIES
+               puts "in query by date #{date} and not null  "
+               queryparams=''
+               queryparams=",#{extraparam}" if extraparam!=nil
+               t=Time.parse(date)
+               y=t.strftime('%Y-%m-%d')
+               querystring="select id,#{key}#{queryparams} from #{element} where createdtime like '#{y}%' and #{key} < '0' and emailoptout=0"
+              countstring="select count(*) from #{element} where createdtime like '#{y}%' and #{key} < '0' and emailoptout=0"
+              succ, values =self.large_query(countstring,querystring)
+end     
 def get_campaigns
                     puts "in get campaigns"
                       action_string=ERB::Util.url_encode("select id,campaignname from Campaigns;")
