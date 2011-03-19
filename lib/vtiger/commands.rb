@@ -24,6 +24,11 @@ module Vtiger
       object_map= { 'assigned_user_id'=>"#{self.userid}",'lastname'=>"#{ln}", 'company'=>"#{co}"}
       add_object(object_map,hashv,'Leads')
     end
+      def add_account(options,accountname,hashv)
+        puts "in addobject"
+        object_map= { 'assigned_user_id'=>"#{self.userid}",'accountname'=>"#{accountname}"}
+        add_object(object_map,hashv,'Leads')
+      end
      def add_contact(options,ln,email,hashv)
         puts "in contact"
         object_map= { 'assigned_user_id'=>"#{self.userid}",'lastname'=>"#{ln}", 'email'=>"#{email}"}
@@ -217,7 +222,7 @@ module Vtiger
        end
 def large_find_items_by_date_and_key_null(element,date,key, extraparam=nil)
             # NEED TO ADD QUERY SIZE CAPABILIIES
-               puts "in query by date #{date} and not null  "
+             
                queryparams=''
                queryparams=",#{extraparam}" if extraparam!=nil
                t=Time.parse(date)
@@ -225,7 +230,16 @@ def large_find_items_by_date_and_key_null(element,date,key, extraparam=nil)
                querystring="select id,#{key}#{queryparams} from #{element} where createdtime like '#{y}%' and #{key} < '0' and emailoptout=0"
               countstring="select count(*) from #{element} where createdtime like '#{y}%' and #{key} < '0' and emailoptout=0"
               succ, values =self.large_query(countstring,querystring)
-end     
+end   
+def large_find_items(element, extraparam=nil)
+            # NEED TO ADD QUERY SIZE CAPABILIIES
+              
+               queryparams=''
+               queryparams=",#{extraparam}" if extraparam!=nil
+               querystring="select id#{queryparams},emailoptout,email,lastname,firstname from #{element}"
+              countstring="select count(*) from #{element}"
+              succ, values =self.large_query(countstring,querystring)
+end  
 def get_campaigns
                     puts "in get campaigns"
                       action_string=ERB::Util.url_encode("select id,campaignname from Campaigns;")
