@@ -27,7 +27,7 @@ module Vtiger
       def add_account(options,accountname,hashv)
         puts "in addobject"
         object_map= { 'assigned_user_id'=>"#{self.userid}",'accountname'=>"#{accountname}"}
-        add_object(object_map,hashv,'Leads')
+        add_object(object_map,hashv,'Accounts')
       end
      def add_contact(options,ln,email,hashv)
         puts "in contact"
@@ -133,22 +133,31 @@ module Vtiger
             puts "in query element by email"
               field='email'
               field='email1' if element=='Accounts'
-              action_string=ERB::Util.url_encode("select id from #{element} where #{field} like '#{email}';")
-            #   puts "action string:" +action_string
-              res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
-              values=res["result"][0] if res["success"]==true   #comes back as array
-              success = false
-              #puts values.inspect
-              # return the account id
-               self.object_id = 'failed'
-               if values!= nil 
-                 self.object_id=values["id"]
-                 success=true
-                # self.account_name=values["accountname"] 
-               end
-               
-               return  success,self.object_id
+              query_element_by_field(element,field,email)
           end
+             def query_element_by_field(element,field,name)
+                  puts "in query element by field"
+                    action_string=ERB::Util.url_encode("select id from #{element} where #{field} like '#{name}';")
+                  #   puts "action string:" +action_string
+                    res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
+                    values=res["result"][0] if res["success"]==true   #comes back as array
+                    success = false
+                    #puts values.inspect
+                    # return the account id
+                     self.object_id = 'failed'
+                     if values!= nil 
+                       self.object_id=values["id"]
+                       success=true
+                      # self.account_name=values["accountname"] 
+                     end
+                     return  success,self.object_id
+                end
+          def query_account_by_name(name)
+              puts "in query account by name"
+                element='Accounts'
+                field='accountname'
+                query_element_by_field(element,field,name)
+            end
           def find_tt_by_contact(contact)
                   puts "in query tt by contact"
                     action_string=ERB::Util.url_encode("select id,ticket_no from HelpDesk where parent_id = '#{contact}';")
