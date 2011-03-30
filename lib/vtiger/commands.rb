@@ -135,6 +135,16 @@ module Vtiger
               field='email1' if element=='Accounts'
               query_element_by_field(element,field,email)
           end
+   def query_elementlist_by_field(element,field,name)
+                      puts "in query element by field"
+                        action_string=ERB::Util.url_encode("select id,#{field} from #{element} where #{field} like '#{name}%';")
+                      #   puts "action string:" +action_string
+                        res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
+                        values=res["result"] if res["success"]==true   #comes back as array
+                       # puts "res is #{res}"
+                        success = res["success"]
+                         return  success,values
+    end          
              def query_element_by_field(element,field,name)
                   puts "in query element by field"
                     action_string=ERB::Util.url_encode("select id from #{element} where #{field} like '#{name}';")
@@ -158,6 +168,12 @@ module Vtiger
                 field='accountname'
                 query_element_by_field(element,field,name)
             end
+  def query_accountlist_by_name(name)
+                  puts "in query accountlist by name: #{name}"
+                    element='Accounts'
+                    field='accountname'
+                    query_elementlist_by_field(element,field,name)
+  end
           def find_tt_by_contact(contact)
                   puts "in query tt by contact"
                     action_string=ERB::Util.url_encode("select id,ticket_no from HelpDesk where parent_id = '#{contact}';")
