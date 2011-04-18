@@ -19,7 +19,7 @@ class CampaignList < ActiveRecord::Base
   def self.scott_connect(dbhost, dbname, dbuser,dbpasswd)
     CampaignList.set_table_name('vtiger_campaigncontrel')
     @myconnection =CampaignList.establish_connection(
-        :adapter  => "mysql",
+        :adapter  => "mysql2",
         :host     => dbhost,
         :username => dbuser,
         :password => dbpasswd,
@@ -43,6 +43,10 @@ class CampaignList < ActiveRecord::Base
   end
   def self.find_accounts_by_campaign(id)
     mysql_results=CampaignList.connection.execute("select vtiger_account.email1 as 'email', vtiger_account.accountname,   vtiger_campaignaccountrel.campaignid from vtiger_account left join vtiger_campaignaccountrel on vtiger_account.accountid=vtiger_campaignaccountrel.accountid where vtiger_campaignaccountrel.campaignid=#{id} and emailoptout=0;;")
+  CampaignList.convert(mysql_results)
+  end
+  def self.find_contacts_by_customfield(field)
+    mysql_results=CampaignList.connection.execute("select vtiger_contactdetails.contactid as 'id',vtiger_contactdetails.email as 'email',#{field} as 'tsipid' from  vtiger_contactdetails left join vtiger_contactscf on vtiger_contactdetails.contactid=vtiger_contactscf.contactid  where #{field} > '0';")
   CampaignList.convert(mysql_results)
   end
 end
@@ -248,6 +252,10 @@ def get_contacts_from_campaign(campaignid)
   #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
   CampaignList.find_contacts_by_campaign(campaignid)
   
+end
+def get_contacts_by_cf(field)
+  #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
+  CampaignList.find_contacts_by_customfield(field)
 end
   end #clase base
 end #moduble
