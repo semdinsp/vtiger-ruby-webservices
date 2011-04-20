@@ -19,13 +19,23 @@ class CampaignList < ActiveRecord::Base
   def self.scott_connect(dbhost, dbname, dbuser,dbpasswd)
     CampaignList.set_table_name('vtiger_campaigncontrel')
     @myconnection =CampaignList.establish_connection(
-        :adapter  => "mysql2",
+        :adapter  => "mysql",
         :host     => dbhost,
         :username => dbuser,
         :password => dbpasswd,
         :database => dbname
       )
   end
+  def self.scott_connect2(dbhost, dbname, dbuser,dbpasswd)
+    # CampaignList.set_table_name('vtiger_campaigncontrel')
+     @myconnection =CampaignList.establish_connection(
+         :adapter  => "mysql",
+         :host     => dbhost,
+         :username => dbuser,
+         :password => dbpasswd,
+         :database => dbname
+       )
+   end
   def self.convert(mysql_res)
     rows=[]
     mysql_res.each_hash { |h| rows << h
@@ -45,8 +55,10 @@ class CampaignList < ActiveRecord::Base
     mysql_results=CampaignList.connection.execute("select vtiger_account.email1 as 'email', vtiger_account.accountname,   vtiger_campaignaccountrel.campaignid from vtiger_account left join vtiger_campaignaccountrel on vtiger_account.accountid=vtiger_campaignaccountrel.accountid where vtiger_campaignaccountrel.campaignid=#{id} and emailoptout=0;;")
   CampaignList.convert(mysql_results)
   end
-  def self.find_contacts_by_customfield(field)
-    mysql_results=CampaignList.connection.execute("select vtiger_contactdetails.contactid as 'id',vtiger_contactdetails.email as 'email',#{field} as 'tsipid' from  vtiger_contactdetails left join vtiger_contactscf on vtiger_contactdetails.contactid=vtiger_contactscf.contactid  where #{field} > '0';")
+  def self.find_contacts_by_customfield(field,value)
+    puts "field: #{field} value #{value}"
+    mysql_results=CampaignList.connection.execute("select vtiger_contactdetails.contactid as 'id',vtiger_contactdetails.email as 'email',#{field} as 'tsipid' from  vtiger_contactdetails left join vtiger_contactscf on vtiger_contactdetails.contactid=vtiger_contactscf.contactid  where #{field} like '#{value}%';")
+  #  puts "after campaign #{mysql_results}"
   CampaignList.convert(mysql_results)
   end
 end
@@ -241,6 +253,13 @@ def accessdatabase(dbhost, dbname, dbuser,dbpasswd)
   
   
 end
+def accessdatabase2(dbhost, dbname, dbuser,dbpasswd)
+  #select vtiger_contactdetails.email, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,  vtiger_campaigncontrel.campaignid from vtiger_contactdetails left join vtiger_campaigncontrel on vtiger_contactdetails.contactid=vtiger_campaigncontrel.contactid where vtiger_campaigncontrel.campaignid='14' and emailoptout=0;
+  #self.campaigndb=CampaignList.new
+  CampaignList.scott_connect2(dbhost, dbname, dbuser,dbpasswd)
+  
+  
+end
 def get_list_from_campaign(campaignid,type)
   #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
   list=CampaignList.find_leads_by_campaign(campaignid) if type=='Leads'
@@ -253,9 +272,9 @@ def get_contacts_from_campaign(campaignid)
   CampaignList.find_contacts_by_campaign(campaignid)
   
 end
-def get_contacts_by_cf(field)
+def get_contacts_by_cf(field,value)
   #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
-  CampaignList.find_contacts_by_customfield(field)
+  CampaignList.find_contacts_by_customfield(field,value)
 end
   end #clase base
 end #moduble
