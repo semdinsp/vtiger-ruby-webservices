@@ -15,7 +15,17 @@ module Vtiger
   class Commands < Vtiger::Base
     attr_accessor  :product_id, :qty_in_stock, :new_quantity, :object_id, :account_name
    
-   
+    def self.vtiger_factory(api)
+           Vtiger::Api.api_settings=api
+           puts "Using #{Vtiger::Api.api_settings.inspect}"
+           cmd = Vtiger::Commands.new()
+           options={}
+           challenge=cmd.challenge(options)
+         #  puts  "VTIGER FACTORY: challenge user: #{cmd.username}, digest =>#{cmd.md5}"
+           login=cmd.login(options)
+            puts "VTIGER FACTORY: #{login} session name is: #{cmd.session_name} userid #{cmd.userid} #{cmd.inspect}"
+           cmd
+    end   
     
      # scott was: def updateobject(options,values)
  # add a lead with ln last name, co company, and hashv a hash of other values you want to set    
@@ -130,7 +140,7 @@ module Vtiger
            #  updateobject(options,{'qtyinstock'=> "#{self.new_quantity}","productname"=>"#{options[:productname]}"})
         end
          def query_element_by_email(email,element)
-            puts "in query element by email"
+            puts "in query element by email #{email} #{element}"
               field='email'
               field='email1' if element=='Accounts'
               query_element_by_field(element,field,email)
@@ -146,9 +156,9 @@ module Vtiger
                          return  success,values
     end          
              def query_element_by_field(element,field,name)
-                  puts "in query element by field"
+                 puts "in query element by field #{field} #{element} name: #{name}"
                     action_string=ERB::Util.url_encode("select id from #{element} where #{field} like '#{name}';")
-                  #   puts "action string:" +action_string
+                    puts "action string:" +action_string
                     res = http_ask_get(self.endpoint_url+"operation=query&sessionName=#{self.session_name}&query="+action_string)
                     values=res["result"][0] if res["success"]==true   #comes back as array
                     success = false

@@ -61,6 +61,12 @@ class CampaignList < ActiveRecord::Base
   #  puts "after campaign #{mysql_results}"
   CampaignList.convert(mysql_results)
   end
+  def self.find_contacts_by_email_and_keynull(key,value)
+    puts "key: #{key} value #{value}"
+    mysql_results=CampaignList.connection.execute("select vtiger_contactdetails.contactid as 'id',vtiger_contactdetails.email as 'email', #{key} as 'tsipid' from  vtiger_contactdetails left join vtiger_contactscf on vtiger_contactdetails.contactid=vtiger_contactscf.contactid  where vtiger_contactdetails.email like '#{value}%' and  #{key} like '';")
+  #  puts "after campaign #{mysql_results}"
+  CampaignList.convert(mysql_results)
+  end
 end
 module Vtiger
   class Base
@@ -169,6 +175,7 @@ end
         #  puts "session name is: #{self.session_name} userid #{self.userid}"
           self.userid!=nil
         end
+
 def retrieve_object(objid)
             puts "in retrieve object"
              #&username=#{self.username}&accessKey=#{self.md5}
@@ -275,6 +282,10 @@ end
 def get_contacts_by_cf(field,value)
   #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
   CampaignList.find_contacts_by_customfield(field,value)
+end
+def get_contacts_by_email_and_keynull(field,value)
+  #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
+  CampaignList.find_contacts_by_email_and_keynull(field,value)
 end
   end #clase base
 end #moduble
