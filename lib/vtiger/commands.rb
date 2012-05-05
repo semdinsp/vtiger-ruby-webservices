@@ -56,9 +56,12 @@ module Vtiger
        # 'tsipid'=>"1234"
        add_object(object_map,hashv,'HelpDesk')
      end
-    def add_email(options,status,title,hashv)
-          puts "in add email ticket NOT COMPLETE"
-          object_map= { 'assigned_user_id'=>"#{self.userid}",'ticketstatus'=>"#{status}", 'ticket_title'=>"#{title}"}
+    def add_email(parentid,parent_type,description,subject,date_start,from,to,cc, time_start, hashv)
+          puts "in add email"
+          object_map= { 'assigned_user_id'=>"#{self.userid}",'parent_id'=>"#{parentid}",  'parent_type'=> "#{parent_type}",
+                     'description' => "#{description}",'subject'=>"#{subject}", 'time'=> "#{time_start}", 'date_start'=>"#{date_start}" ,     
+                        'saved_toid' => "#{to}",  'ccmail' => "#{cc}",'from_email'=> "#{from}"
+                    }
           object_map=object_map.merge hashv
           # 'tsipid'=>"1234"
           add_object(object_map,hashv,'Emails')
@@ -172,6 +175,12 @@ module Vtiger
                      end
                      return  success,self.object_id
                 end
+                def query_lead_by_email(name)
+                    puts "in query lead by email"
+                      element='Leads'
+                      field='email'
+                      query_element_by_field(element,field,name)
+                  end
           def query_account_by_name(name)
               puts "in query account by name"
                 element='Accounts'
@@ -266,6 +275,17 @@ def large_find_items_by_date_and_key_null(element,date,key, extraparam=nil)
               countstring="select count(*) from #{element} where createdtime like '#{y}%' and #{key} < '0' and emailoptout=0"
               succ, values =self.large_query(countstring,querystring)
 end   
+def large_find_items_by_date(element,date, extraparam=nil)
+            # NEED TO ADD QUERY SIZE CAPABILIIES
+             
+               queryparams=''
+               queryparams=",#{extraparam}" if extraparam!=nil
+               t=Time.parse(date)
+               y=t.strftime('%Y-%m-%d')
+               querystring="select id#{queryparams} from #{element} where createdtime like '#{y}%'  and emailoptout=0"
+              countstring="select count(*) from #{element} where createdtime like '#{y}%'  and emailoptout=0"
+              succ, values =self.large_query(countstring,querystring)
+end
 def large_find_items(element, extraparam=nil)
             # NEED TO ADD QUERY SIZE CAPABILIIES
               

@@ -55,7 +55,15 @@ Can now directly access Vtiger DB to run some queries.  See base.rb campaignlist
 
 find userid from vtiger_users  (supposed to be in preferences section)
 select username,accessKey from vtiger_users;
-
+ == USAGE with new factory
+	 api ={
+        :username => 'admin',
+      :key => 'xxxx',
+       # :username => 'admin',
+       # :key => 'xxxx',
+        :url => 'democrm.estormtech.com',
+      }
+  cmd = Vtiger::Commands.vtiger_factory(api)
 
 tokens are stored in
  vtiger_ws_userauthtoken  

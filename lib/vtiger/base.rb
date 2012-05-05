@@ -55,9 +55,9 @@ class CampaignList < ActiveRecord::Base
     mysql_results=CampaignList.connection.execute("select vtiger_account.email1 as 'email', vtiger_account.accountname,   vtiger_campaignaccountrel.campaignid from vtiger_account left join vtiger_campaignaccountrel on vtiger_account.accountid=vtiger_campaignaccountrel.accountid where vtiger_campaignaccountrel.campaignid=#{id} and emailoptout=0;;")
   CampaignList.convert(mysql_results)
   end
-  def self.find_contacts_by_customfield(field,value)
+  def self.find_contacts_by_customfield(field,value,extra='') # ",customfield as latest_receipt"
     puts "field: #{field} value #{value}"
-    mysql_results=CampaignList.connection.execute("select vtiger_contactdetails.contactid as 'id',vtiger_contactdetails.email as 'email',#{field} as 'tsipid' from  vtiger_contactdetails left join vtiger_contactscf on vtiger_contactdetails.contactid=vtiger_contactscf.contactid  where #{field} like '#{value}%';")
+    mysql_results=CampaignList.connection.execute("select vtiger_contactdetails.contactid as 'id',vtiger_contactdetails.email as 'email'#{extra},#{field} as 'tsipid' from  vtiger_contactdetails left join vtiger_contactscf on vtiger_contactdetails.contactid=vtiger_contactscf.contactid  where #{field} like '#{value}%';")
   #  puts "after campaign #{mysql_results}"
   CampaignList.convert(mysql_results)
   end
@@ -158,6 +158,7 @@ end
          # puts "input array:"  + input_array.to_s   #&username=#{self.username}&accessKey=#{self.md5}
           # scott not working -- JSON.generate(input_array,{'array_nl'=>'true'})
           result = http_crm_post("operation=create",input_array)
+        #  puts "ADD OBJEcT #{result.inspect}"
          # self.session_name=result["result"]["sessionName"]
           # puts JSON.pretty_generate(result)
           success=result['success']
@@ -279,9 +280,9 @@ def get_contacts_from_campaign(campaignid)
   CampaignList.find_contacts_by_campaign(campaignid)
   
 end
-def get_contacts_by_cf(field,value)
+def get_contacts_by_cf(field,value,extra='')
   #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)
-  CampaignList.find_contacts_by_customfield(field,value)
+  CampaignList.find_contacts_by_customfield(field,value,extra)
 end
 def get_contacts_by_email_and_keynull(field,value)
   #self.campaigndb.find_contacts_by_campaign(self.campaigndb,campaignid)

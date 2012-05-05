@@ -56,7 +56,8 @@ module Vtiger
                                                      puts "filename #{val}"     }                                                                                                                                                    
       opts.on_tail("-h","--help", "get help message") { |val| temp_hash[:help ] = true    
                                                           puts opts          }                                        
-                                       
+             opts.on("-s","--subject VAL", String) {|val|  temp_hash[:subject ] = val 
+                                                          puts "subject #{val}"     }                                  
        opts.parse(params)
                      # puts " in HTTP #{hostname} port #{port} url: #{url}"
       

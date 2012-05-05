@@ -42,6 +42,17 @@ class TestVtiger < Test::Unit::TestCase
        assert suc,"success should be true"
        puts "list is #{list}"
     end
+    def test_add_email
+       setup
+       cmd = Vtiger::Commands.new()
+       challenge=cmd.challenge(@options)
+       puts "challenge is: #{challenge}"
+       login=cmd.login(@options)
+       puts "login is #{login}"
+       res=cmd.add_email('3x314',"Accounts","hopefully this is the email","subject is","2011-06-02",from, to,cc ,"9:00",{})   # returned 3x314   
+       puts "ADD EMAIL: res is: #{res.inspect}"
+    end
+    
     def test_accountlist2
         setup
          cmd = Vtiger::Commands.new()
